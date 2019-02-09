@@ -28,6 +28,8 @@ def tof(expr):
         return plus_tof(expr)
     elif isinstance(expr, quot):
         return quot_tof(expr)
+    elif isinstance(expr, absv):
+        return absv_tof(expr)
     elif isinstance(expr, ln):
         return ln_tof(expr)
     elif isinstance(expr, var):
@@ -36,10 +38,10 @@ def tof(expr):
         raise Exception('tof: ' + str(expr))
 
 def is_valid_non_const_var_expr(expr):
-    return isinstance(expr, plus) or isinstance(expr, pwr) or isinstance(expr, prod) or isinstance(expr, quot) or isinstance(expr, ln)
+    return isinstance(expr, plus) or isinstance(expr, pwr) or isinstance(expr, prod) or isinstance(expr, quot) or isinstance(expr, ln) or isinstance(expr, absv)
 
 def is_valid_non_const_expr(expr):
-    return isinstance(expr, var) or isinstance(expr, plus) or isinstance(expr, pwr) or isinstance(expr, prod) or isinstance(expr, quot) or isinstance(expr, ln)
+    return isinstance(expr, var) or isinstance(expr, plus) or isinstance(expr, pwr) or isinstance(expr, prod) or isinstance(expr, quot) or isinstance(expr, ln) or isinstance(expr, absv)
 
 ## here is how you can implement converting
 ## a constant to a function.
@@ -48,6 +50,10 @@ def const_tof(c):
     def f(x):
         return c.get_val()
     return f
+
+def absv_tof(expr):
+    inner = expr.get_expr()
+    return lambda x: abs(tof(inner)(x))
 
 def ln_tof(expr):
     assert isinstance(expr, ln)
@@ -97,7 +103,7 @@ def quot_tof(expr):
     elif is_valid_non_const_expr(left):
         if isinstance(right, const):
             return lambda x: tof(left)(x) / right.get_val()
-        elif isinstance(right, var) or isinstance(right, plus) or isinstance(right, pwr) or isinstance(right, prod) or isinstance(right, quot):
+        elif is_valid_non_const_expr(right):
             return lambda x: tof(left)(x) / tof(right)(x)
         else:
             raise Exception('prod_tof: case 3:' + str(expr))

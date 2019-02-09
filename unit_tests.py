@@ -11,7 +11,7 @@ from __future__ import print_function
 import unittest
 import math
 from prod import prod
-from maker import make_const, make_pwr, make_prod, make_plus, make_point2d, make_quot, make_pwr_expr, make_e_expr, make_ln
+from maker import make_const, make_pwr, make_prod, make_plus, make_point2d, make_quot, make_pwr_expr, make_e_expr, make_ln, make_absv
 from plus import plus
 from tof import tof
 from const import const
@@ -892,18 +892,72 @@ class Assign01UnitTests(unittest.TestCase):
     def test_assign_04_prob_01_ut_05_0(self):
         print('\n***** Assign 04: Problem 01: Unit Test 05 *****')
         fex = make_pwr_expr(make_ln(make_pwr('x', 1.0)), 5.0)
-        print(fex)
+        # print(fex)
         drv = deriv(fex)
         assert not drv is None
-        print(drv)
+        # print(drv)
         drvf = tof(drv)
         assert not drvf is None
         gt = lambda x: (5.0*(math.log(x, math.e)**4))/x
         err = 0.0001
         for i in range(1, 5):
-            print(drvf(i), gt(i))
+            # print(drvf(i), gt(i))
             assert abs(gt(i) - drvf(i)) <= err
         print('Assign 04: Problem 01: Unit Test 05: pass')
+
+    def test_assign_04_prob_01_ut_06_0(self):
+        print('\n***** Assign 04: Problem 01: Unit Test 06 *****')
+        fex = make_prod(make_pwr('x', 1.0),
+        make_ln(make_pwr('x', 1.0)))
+        # print(fex)
+        drv = deriv(fex)
+        assert not drv is None
+        # print(drv)
+        drvf = tof(drv)
+        assert not drvf is None
+        gt = lambda x: 1.0 + math.log(x, math.e)
+        err = 0.0001
+        for i in range(1, 10):
+            # print(drvf(i), gt(i))
+            assert abs(gt(i) - drvf(i)) <= err
+        print('Assign 04: Problem 01: Unit Test 06: pass')
+
+    def test_assign_04_prob_01_ut_07_0(self):
+        print('\n***** Assign 04: Problem 01: Unit Test 07 *****')
+        fex0 = make_prod(make_pwr('x', 1.0),
+        make_e_expr(make_pwr('x', 1.0)))
+        fex = make_ln(fex0)
+        # print(fex)
+        drv = deriv(fex)
+        assert not drv is None
+        # print(drv)
+        drvf = tof(drv)
+        assert not drvf is None
+        gt = lambda x: (x + 1.0)/x
+        err = 0.0001
+        for i in range(1, 10):
+            # print(drvf(i), gt(i))
+            assert abs(gt(i) - drvf(i)) <= err
+        for i in range(-10, -1):
+            # print(drvf(i), gt(i))
+            assert abs(gt(i) - drvf(i)) <= 0.001
+        print('Assign 04: Problem 01: Unit Test 07: pass')
+
+    def test_assign_04_prob_01_ut_08_0(self):
+        print('\n***** Assign 04: Problem 01: Unit Test 08 *****')
+        fex = make_ln(make_absv(make_pwr('x', 1.0)))
+        # print(fex)
+        drv = deriv(fex)
+        assert not drv is None
+        # print(drv)
+        drvf = tof(drv)
+        assert not drvf is None
+        gt = lambda x: 1.0/x
+        err = 0.0001
+        for i in range(1, 10):
+            # print(drvf(i), gt(i))
+            assert abs(gt(i) - drvf(i)) <= err
+        print('Assign 04: Problem 01: Unit Test 08: pass')
 
     def runTest(self):
         pass

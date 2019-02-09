@@ -14,6 +14,7 @@ from quot import quot
 from ln import ln
 from absv import absv
 from maker import make_const, make_pwr, make_pwr_expr
+from tof import is_valid_non_const_expr, is_valid_non_const_var_expr
 import math
 
 def isConstE(c):
@@ -68,10 +69,16 @@ def deriv(expr):
         return quot_deriv(expr)
     elif isinstance(expr, var):
         return const(1.0)
+    elif isinstance(expr, absv):
+        return absv_deriv(expr)
     elif isinstance(expr, ln):
         return ln_deriv(expr)
     else:
         raise Exception('deriv:' + repr(expr))
+
+def absv_deriv(expr):
+    inner = expr.get_expr()
+    return absv(deriv(inner))
 
 # the derivative of a consant is 0.
 def const_deriv(c):
@@ -88,7 +95,6 @@ def ln_deriv(expr):
     inner = expr.get_expr()
     #f`(ln(g(x))) = g`(x)/g(x)
     return quot(deriv(inner) , inner)
-
 
 def pwr_deriv(p):
     assert isinstance(p, pwr)
@@ -108,7 +114,7 @@ def pwr_deriv(p):
             return flattenProduct(prod(mult1=d,mult2=pwr(b,new_d)))
         else:
             raise Exception('pwr_deriv: case 1: ' + str(p))
-    elif isinstance(b, plus) or isinstance(b, prod) or isinstance(b, pwr) or isinstance(b, quot) or isinstance(b, ln): #base is an expression ie: (x + 2)^2 or (2x)^2 etc
+    elif is_valid_non_const_expr(b):#base is an expression ie: (x + 2)^2 or (2x)^2 etc
         if isinstance(d, const):
             if d.get_val() == 0.0:
                 return make_const(0.0)
@@ -124,8 +130,7 @@ def pwr_deriv(p):
         if isinstance(d, const):
             #f`(e^c) == 0, where c is a constant
             return make_const(0.0)
-        elif isinstance(d, plus) or isinstance(d, prod) or isinstance(d, pwr) or isinstance(d, quot): #base is an expression ie: (x + 2)^2 or (2x)^2 etc
-            pass#do stuff
+        elif is_valid_non_const_expr(d): #base is an expression ie: (x + 2)^2 or (2x)^2 etc
             # d/dx(e^f(x)) = f`(x)*e^f(x)
             return flattenProduct(prod( deriv(d), p )) #where d is f`(x) and p is e^f(x), ie the original expression
         else:
@@ -157,7 +162,7 @@ def prod_deriv(p):
     elif isinstance(m2, const):
         #(f*g)' = f'*g + f*g' where g' == 0 so (f*g)' = f'*g
         return flattenProduct(prod(m2,deriv(m1)))
-    elif isinstance(m1, plus) or isinstance(m1, prod) or isinstance(m1, pwr) or isinstance(m1, quot) or isinstance(m1, var):
+    elif is_valid_non_const_expr(m1):
         #(f*g)' = f'*g + f*g'
         return plus( flattenProduct(prod(m2,deriv(m1))), flattenProduct(prod(m1,deriv(m2))) ) #full product rule
     else:
