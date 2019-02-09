@@ -962,10 +962,10 @@ class Assign01UnitTests(unittest.TestCase):
     def test_assign_04_prob_01_ut_08_0(self):
         print('\n***** Assign 04: Problem 02: Unit Test 09 *****')
         fex = make_prod(make_pwr('x', 1.0), make_prod(make_plus(make_pwr('x', 1.0), make_const(1.0)), make_plus(make_pwr('x', 1.0), make_const(2.0))))
-        print(fex)
+        # print(fex)
         drv = logdiff(fex)
         assert not drv is None
-        print(drv)
+        # print(drv)
         drvf = tof(drv)
         assert not drvf is None
         def gt_drvf(x):
@@ -974,12 +974,12 @@ class Assign01UnitTests(unittest.TestCase):
             return z * z2
         err = 0.0001
         for i in range(1, 10):
-            print(drvf(i), gt_drvf(i))
+            # print(drvf(i), gt_drvf(i))
             assert abs(gt_drvf(i) - drvf(i)) <= err
         for i in range(-10, -1):
             if i == -1 or i == -2:
                 continue
-            print(drvf(i), gt_drvf(i))
+            # print(drvf(i), gt_drvf(i))
             assert abs(gt_drvf(i) - drvf(i)) <= err
         print('Assign 04: Problem 02: Unit Test 09: pass')
 
