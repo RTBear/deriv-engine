@@ -959,7 +959,7 @@ class Assign01UnitTests(unittest.TestCase):
             assert abs(gt(i) - drvf(i)) <= err
         print('Assign 04: Problem 01: Unit Test 08: pass')
 
-    def test_assign_04_prob_01_ut_08_0(self):
+    def test_assign_04_prob_01_ut_09_0(self):
         print('\n***** Assign 04: Problem 02: Unit Test 09 *****')
         fex = make_prod(make_pwr('x', 1.0), make_prod(make_plus(make_pwr('x', 1.0), make_const(1.0)), make_plus(make_pwr('x', 1.0), make_const(2.0))))
         # print(fex)
@@ -982,6 +982,54 @@ class Assign01UnitTests(unittest.TestCase):
             # print(drvf(i), gt_drvf(i))
             assert abs(gt_drvf(i) - drvf(i)) <= err
         print('Assign 04: Problem 02: Unit Test 09: pass')
+
+    def test_assign_04_prob_01_ut_10_0(self):
+        print('\n***** Assign 04: Problem 02: Unit Test 10 *****')
+        fex1 = make_plus(make_pwr('x', 2.0), make_const(1.0))
+        fex2 = make_plus(make_pwr('x', 3.0), make_const(-3.0))
+        fex3 = make_plus(make_prod(make_const(2.0),
+        make_pwr('x', 1.0)),
+        make_const(5.0))
+        fex = make_prod(fex1, make_prod(fex2, fex3))
+        # print(fex)
+        drv = logdiff(fex)
+        assert not drv is None
+        # print(drv)
+        drvf = tof(drv)
+        assert not drvf is None
+        def gt_drvf(x):
+            z = (x**2 + 1.0)*(x**3 - 3.0)*(2*x + 5.0)
+            z2 = ((2.0*x)/(x**2 + 1) + (3.0*(x**2))/(x**3 - 3.0) \
+            + 2.0/(2*x + 5.0))
+            return z * z2
+        for i in range(1, 10):
+            # print(drvf(i), gt_drvf(i))
+            assert abs(gt_drvf(i) - drvf(i)) <= 0.001
+        print('Assign 04: Problem 02: Unit Test 10: pass')
+
+    def test_assign_04_prob_01_ut_11_0(self):
+        print('\n***** Assign 04: Problem 02: Unit Test 11 *****')
+        fex1 = make_pwr_expr(make_plus(make_pwr('x', 1.0),
+        make_const(1.0)),
+        4.0)
+        fex2 = make_pwr_expr(make_plus(make_prod(make_const(4.0),
+        make_pwr('x', 1.0)),
+        make_const(-1.0)),
+        2.0)
+        fex = make_prod(fex1, fex2)
+        # print(fex)
+        drv = logdiff(fex)
+        assert not drv is None
+        # print(drv)
+        drvf = tof(drv)
+        def gt_drvf(x):
+            z1 = ((x + 1.0)**4.0) * ((4*x - 1.0)**2.0)
+            z2 = (4.0/(x + 1.0)) + ( 8.0/(4*x - 1.0))
+            return z1 * z2
+        for i in range(0, 20):
+            # print(drvf(i), gt_drvf(i))
+            assert abs(gt_drvf(i) - drvf(i)) <= 0.001
+        print('Assign 04: Problem 02: Unit Test 11: pass')
 
     def runTest(self):
         pass
