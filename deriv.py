@@ -168,5 +168,37 @@ def prod_deriv(p):
     else:
        raise Exception('prod_deriv: case 2:' + str(p))
 
+#####################################################################
+## LOGARITHMIC DIFFERENTIATION (not differentiation of logarithms) ##
+#####################################################################
+#The Math:
+# d/dx( f(x) ) = f(x) * d/dx( ln(f(x)) )
+# if f(x) is something of the form (a)*(b)*(c)
+# we get f`(x) = (a)*(b)*(c) * d/dx( ln((a)*(b)*(c)) )
+#              = (a)*(b)*(c) * d/dx( ln(a)+ln(b)+ln(c) )
+#              = (a)*(b)*(c) * (  d/dx( ln(a) ) + d/dx( ln(b) ) + d/dx( ln(c) )  )
+# if a = (x), b = (x + 1), c = (x + 2)
+# we would get f`((x)(x+1)(x+2)) = (x)(x+1)(x+2)*(1/(x) + 1/(x+1) + 1/(x+2))
+# d/dx( f(x) ) = f(x) * d/dx( ln(f(x)) )
 
+def logdiff(expr):
+    if isinstance(expr, prod):
+        return prod_logdiff(expr)
+    else:
+        raise Exception('logdiff: case 1:' + str(expr))
 
+def prod_logdiff(expr):
+    assert isinstance(expr, prod)
+
+    left = expr.get_mult1()
+    right = expr.get_mult2()
+
+    if isinstance(left, const):#c*()*()...
+        return flattenProduct(prod(left,logdiff(right)))
+    # elif isinstance(left, var):#x*()*()...
+        # raise Exception('prod_logdiff: case 2:' + str(expr))
+    elif is_valid_non_const_expr(left):#g(x)*(()*())
+        return flattenProduct( prod(expr , deriv(ln(expr))) )
+    else:
+        raise Exception('prod_logdiff: case 1:' + str(expr))
+        

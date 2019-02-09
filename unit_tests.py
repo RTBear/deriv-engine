@@ -15,7 +15,7 @@ from maker import make_const, make_pwr, make_prod, make_plus, make_point2d, make
 from plus import plus
 from tof import tof
 from const import const
-from deriv import deriv
+from deriv import deriv, logdiff
 from poly12 import find_poly_1_zeros, find_poly_2_zeros
 from point2d import point2d
 from derivtest import loc_xtrm_1st_drv_test, loc_xtrm_2nd_drv_test
@@ -958,6 +958,30 @@ class Assign01UnitTests(unittest.TestCase):
             # print(drvf(i), gt(i))
             assert abs(gt(i) - drvf(i)) <= err
         print('Assign 04: Problem 01: Unit Test 08: pass')
+
+    def test_assign_04_prob_01_ut_08_0(self):
+        print('\n***** Assign 04: Problem 02: Unit Test 09 *****')
+        fex = make_prod(make_pwr('x', 1.0), make_prod(make_plus(make_pwr('x', 1.0), make_const(1.0)), make_plus(make_pwr('x', 1.0), make_const(2.0))))
+        print(fex)
+        drv = logdiff(fex)
+        assert not drv is None
+        print(drv)
+        drvf = tof(drv)
+        assert not drvf is None
+        def gt_drvf(x):
+            z = x*(x + 1.0)*(x + 2.0)
+            z2 = (1.0/x + 1.0/(x + 1.0) + 1.0/(x + 2.0))
+            return z * z2
+        err = 0.0001
+        for i in range(1, 10):
+            print(drvf(i), gt_drvf(i))
+            assert abs(gt_drvf(i) - drvf(i)) <= err
+        for i in range(-10, -1):
+            if i == -1 or i == -2:
+                continue
+            print(drvf(i), gt_drvf(i))
+            assert abs(gt_drvf(i) - drvf(i)) <= err
+        print('Assign 04: Problem 02: Unit Test 09: pass')
 
     def runTest(self):
         pass
