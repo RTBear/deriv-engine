@@ -11,8 +11,18 @@ from pwr import pwr
 from prod import prod
 from plus import plus
 from quot import quot
+from ln import ln
+from absv import absv
 from maker import make_const, make_pwr, make_pwr_expr
 import math
+
+def isConstE(c):
+    #check if a const is e (2.718...)
+    if isinstance(c, const):
+        if (c.get_val() - math.e) < .0000001:
+            return True
+
+    return False
 
 def const_flatten(c):
     while(type(c) != type(1.0) and type(c) != type(1)):
@@ -58,6 +68,8 @@ def deriv(expr):
         return quot_deriv(expr)
     elif isinstance(expr, var):
         return const(1.0)
+    elif isinstance(expr, ln):
+        return ln_deriv(expr)
     else:
         raise Exception('deriv:' + repr(expr))
 
@@ -70,6 +82,13 @@ def plus_deriv(s):
     left = s.get_elt1()
     right = s.get_elt2()
     return flattenPlus(plus(elt1=deriv(left),elt2=deriv(right)))
+
+def ln_deriv(expr):
+    assert isinstance(expr, ln)
+    inner = expr.get_expr()
+    #f`(ln(g(x))) = g`(x)/g(x)
+    return quot(deriv(inner) , inner)
+
 
 def pwr_deriv(p):
     assert isinstance(p, pwr)
@@ -89,7 +108,7 @@ def pwr_deriv(p):
             return flattenProduct(prod(mult1=d,mult2=pwr(b,new_d)))
         else:
             raise Exception('pwr_deriv: case 1: ' + str(p))
-    elif isinstance(b, plus) or isinstance(b, prod) or isinstance(b, pwr) or isinstance(b, quot): #base is an expression ie: (x + 2)^2 or (2x)^2 etc
+    elif isinstance(b, plus) or isinstance(b, prod) or isinstance(b, pwr) or isinstance(b, quot) or isinstance(b, ln): #base is an expression ie: (x + 2)^2 or (2x)^2 etc
         if isinstance(d, const):
             if d.get_val() == 0.0:
                 return make_const(0.0)
@@ -99,6 +118,16 @@ def pwr_deriv(p):
                 return deriv(b)
 
             return flattenProduct(prod(mult1=flattenProduct(prod(mult1=d, mult2=pwr(b,new_d))), mult2=deriv(b)))
+        else:
+            raise Exception('pwr_deriv: case 2: ' + str(p))
+    elif isConstE(b):
+        if isinstance(d, const):
+            #f`(e^c) == 0, where c is a constant
+            return make_const(0.0)
+        elif isinstance(d, plus) or isinstance(d, prod) or isinstance(d, pwr) or isinstance(d, quot): #base is an expression ie: (x + 2)^2 or (2x)^2 etc
+            pass#do stuff
+            # d/dx(e^f(x)) = f`(x)*e^f(x)
+            return flattenProduct(prod( deriv(d), p )) #where d is f`(x) and p is e^f(x), ie the original expression
         else:
             raise Exception('pwr_deriv: case 2: ' + str(p))
     else:

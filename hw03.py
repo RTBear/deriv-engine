@@ -25,8 +25,8 @@ def maximize_revenue(dmnd_eq, constraint=lambda x: x >= 0):#only works on linear
     rev = incrementPolyPwrs(dmnd_eq,1)
     rev_drv = deriv(rev)
     # print 'eq:',dmnd_eq
-    print 'rev',rev
-    print 'rev deriv',rev_drv
+    # print 'rev',rev
+    # print 'rev deriv',rev_drv
     rev_drv_f = tof(rev_drv)
     dmnd_f = tof(dmnd_eq)
     rev_f = tof(rev)

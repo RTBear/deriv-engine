@@ -11,7 +11,7 @@ from __future__ import print_function
 import unittest
 import math
 from prod import prod
-from maker import make_const, make_pwr, make_prod, make_plus, make_point2d, make_quot, make_pwr_expr
+from maker import make_const, make_pwr, make_prod, make_plus, make_point2d, make_quot, make_pwr_expr, make_e_expr, make_ln
 from plus import plus
 from tof import tof
 from const import const
@@ -77,8 +77,8 @@ class Assign01UnitTests(unittest.TestCase):
         err = 0.00001
         for i in range(-100, 100):
             assert abs(drvf(i) - gt(i)) <= err
-        print(prd)
-        print(drv)
+        # print(prd)
+        # print(drv)
         print('Assign 01: Unit Test 03-1: pass')
 
     def test_assgn_01_ut_04(self):
@@ -332,11 +332,11 @@ class Assign01UnitTests(unittest.TestCase):
         make_plus(make_pwr('x', 1.0), make_const(-3.0)))
         pex = make_pwr_expr(q, 3.0)
         # print('-- function expression is:\n')
-        print(pex)
+        # print(pex)
         pexdrv = deriv(pex)
         assert not pexdrv is None
         # print('\n-- derivative is:\n')
-        print(pexdrv)
+        # print(pexdrv)
         pexdrvf = tof(pexdrv)
         assert not pexdrvf is None
         gt = lambda x: -42.0*(((x + 11.0)**2)/((x - 3.0)**4))
@@ -358,9 +358,9 @@ class Assign01UnitTests(unittest.TestCase):
         # print sum2
         # print drv
         xtrm = loc_xtrm_2nd_drv_test(sum2)
-        for val in xtrm:
-            print(val[0])
-            print(val[1])
+        # for val in xtrm:
+        #     print(val[0])
+        #     print(val[1])
         # print loc_xtrm_2nd_drv_test(drv)
         num_units, rev, price = maximize_revenue(dmnd_eq=sum2,constraint=lambda x: 0 <= x <= 60)
         # print "num_units",num_units
@@ -383,6 +383,7 @@ class Assign01UnitTests(unittest.TestCase):
         print('Assign 03: Unit Test 05: pass')
     
     ##########################################################
+    #grading unit tests for assign 3
     ##########################################################
 
     def test_assign_03_prob_01_ut_01(self):
@@ -390,10 +391,10 @@ class Assign01UnitTests(unittest.TestCase):
         e1 = make_pwr('x', 2.0)
         e2 = make_pwr('x', 3.0)
         e3 = make_prod(e1, e2)
-        print(e3)
+        # print(e3)
         drv = deriv(e3)
         assert not drv is None
-        print(drv)
+        # print(drv)
         e3f = tof(drv)
         assert not e3f is None
         f = lambda x: 5.0*(x**4)
@@ -411,7 +412,7 @@ class Assign01UnitTests(unittest.TestCase):
         e5 = make_prod(make_const(3.0), make_pwr('x', 1.0))
         e6 = make_plus(e5, make_const(1.0))
         e7 = make_prod(e4, e6)
-        print(e7)
+        # print(e7)
         e7f = tof(deriv(e7))
         assert not e7f is None
         f = lambda x: 24*(x**3) +  6*(x**2) - 30*x - 5.0
@@ -436,7 +437,7 @@ class Assign01UnitTests(unittest.TestCase):
         
         e9 = make_prod(e4, e8)
 
-        print(e9)
+        # print(e9)
         e9f = tof(deriv(e9))
         assert not e9f is None
         def drvf(x):
@@ -462,7 +463,7 @@ class Assign01UnitTests(unittest.TestCase):
         
         e9 = make_prod(e4, e8)
 
-        print(e9)
+        # print(e9)
         e9f = tof(deriv(e9))
         assert not e9f is None
         err = 0.000001
@@ -486,13 +487,13 @@ class Assign01UnitTests(unittest.TestCase):
 
         e8 = make_prod(e1, e7)
         # 1) print the expression we just constructed
-        print('-- function expression is:\n')
-        print(e8)
+        # print('-- function expression is:\n')
+        # print(e8)
         # 2) differentiate and make sure that it not None
         drv = deriv(e8)
         assert not drv is None
-        print('\n-- derivative is:\n')
-        print(e8)
+        # print('\n-- derivative is:\n')
+        # print(e8)
         # 3) convert drv into a function
         e8f = tof(drv)
         assert not e8f is None
@@ -501,7 +502,7 @@ class Assign01UnitTests(unittest.TestCase):
         gt = lambda x: 4.0*(x**3) + 3*(x**2) + 10.0*x + 7.0
         # 5) compare the ground gruth with what we got in
         # step 3) on an appropriate number range.
-        print('\n--comparison with ground truth:\n')
+        # print('\n--comparison with ground truth:\n')
         err = 0.00001
         for i in range(15):
             #print(e8f(i), gt(i))
@@ -528,17 +529,17 @@ class Assign01UnitTests(unittest.TestCase):
         e14 = make_plus(e13, make_const(1.0))
 
         e15 = make_prod(e4, e14)
-        print('-- function expression is:\n')
-        print(e15)
+        # print('-- function expression is:\n')
+        # print(e15)
         drv = deriv(e15)
         assert not drv is None
-        print('\n-- derivative is:\n')
-        print(drv)
+        # print('\n-- derivative is:\n')
+        # print(drv)
         e15f = tof(drv)
         assert not e15f is None
         gt = lambda x: -18.0*(x**8) + 6.0*(x**5) - 5.0*(x**4) +  8.0*(x**3) - 1.0
         err = 0.00001
-        print('\n--comparison with ground truth:\n')
+        # print('\n--comparison with ground truth:\n')
         for i in range(10):
             #print(e15f(i), gt(i)) 
             assert abs(e15f(i) - gt(i)) <= err
@@ -550,39 +551,39 @@ class Assign01UnitTests(unittest.TestCase):
         q = make_quot(make_plus(make_pwr('x', 1.0), make_const(11.0)),
                       make_plus(make_pwr('x', 1.0), make_const(-3.0)))
         pex = make_pwr_expr(q, 3.0)
-        print('-- function expression is:\n')
-        print(pex)
+        # print('-- function expression is:\n')
+        # print(pex)
         pexdrv = deriv(pex)
         assert not pexdrv is None
-        print('\n-- derivative is:\n')
-        print(pexdrv)
+        # print('\n-- derivative is:\n')
+        # print(pexdrv)
         pexdrvf = tof(pexdrv)
         assert not pexdrvf is None
         gt = lambda x: -42.0*(((x + 11.0)**2)/((x - 3.0)**4))
         err = 0.00001
-        print('\n--comparison with ground truth:\n')
+        # print('\n--comparison with ground truth:\n')
         for i in range(100):
             if i != 3.0:
                 #print(pexdrvf(i), gt(i))
                 assert abs(pexdrvf(i) - gt(i)) <= err
-        print('Assign 03: UT07: Problem 01: Unit Test 07: pass')
+        print('Assign 03: Problem 01: Unit Test 07: pass')
 
     def test_assign_03_prob_01_ut_08(self):
-        print('\n***** Assign 03: UT08: Problem 01: Unit Test 08 *****')
+        print('\n***** Assign 03 Problem 01: Unit Test 08 *****')
         q = make_quot(make_plus(make_pwr('x', 1.0), make_const(11.0)),
                       make_plus(make_pwr('x', 1.0), make_const(-3.0)))
         pex = make_pwr_expr(q, 3.0)
-        print('-- function expression is:\n')
-        print(pex)
+        # print('-- function expression is:\n')
+        # print(pex)
         pexdrv = deriv(pex)
         assert not pexdrv is None
-        print('\n-- derivative is:\n')
-        print(pexdrv)
+        # print('\n-- derivative is:\n')
+        # print(pexdrv)
         pexdrvf = tof(pexdrv)
         assert not pexdrvf is None
         gt = lambda x: -42.0*(((x + 11.0)**2)/((x - 3.0)**4))
         err = 0.00001
-        print('\n--comparison with ground truth:\n')
+        # print('\n--comparison with ground truth:\n')
         for i in range(100):
             if i != 3.0:
                 #print(pexdrvf(i), gt(i))
@@ -600,7 +601,7 @@ class Assign01UnitTests(unittest.TestCase):
         q = make_quot(n, d)
         qdrv = deriv(q)
         assert not qdrv is None
-        print(qdrv)
+        # print(qdrv)
         qdrvf = tof(qdrv)
         assert not qdrvf is None
         def gt_drvf(x):
@@ -616,17 +617,17 @@ class Assign01UnitTests(unittest.TestCase):
         q = make_quot(make_plus(make_pwr('x', 1.0), make_const(11.0)),
                       make_plus(make_pwr('x', 1.0), make_const(-3.0)))
         pex = make_pwr_expr(q, 3.0)
-        print('-- function expression is:\n')
-        print(pex)
+        # print('-- function expression is:\n')
+        # print(pex)
         pexdrv = deriv(pex)
         assert not pexdrv is None
-        print('\n-- derivative is:\n')
-        print(pexdrv)
+        # print('\n-- derivative is:\n')
+        # print(pexdrv)
         pexdrvf = tof(pexdrv)
         assert not pexdrvf is None
         gt = lambda x: -42.0*(((x + 11.0)**2)/((x - 3.0)**4))
         err = 0.00001
-        print('\n--comparison with ground truth:\n')
+        # print('\n--comparison with ground truth:\n')
         for i in range(10):
             if i != 3.0:
                 #print(pexdrvf(i), gt(i))
@@ -645,9 +646,9 @@ class Assign01UnitTests(unittest.TestCase):
         num_units, rev, price = \
                    maximize_revenue(dmndf_expr,
                                     constraint=lambda x: 0 <= x <= 60)
-        print('x = ', num_units.get_val())
-        print('rev = ', rev.get_val())
-        print('price = ', price.get_val())
+        # print('x = ', num_units.get_val())
+        # print('rev = ', rev.get_val())
+        # print('price = ', price.get_val())
         err = 0.000000000001
         assert abs(num_units.get_val() - 20.0) <= err
         assert abs(rev.get_val() - 2666.6666666666665) <= err
@@ -663,9 +664,9 @@ class Assign01UnitTests(unittest.TestCase):
         num_units, rev, price = \
                    maximize_revenue(dmndf_expr,
                                     constraint=lambda x: 0 <= x <= 70)
-        print('x = ', num_units.get_val())
-        print('rev = ', rev.get_val())
-        print('price = ', price.get_val())
+        # print('x = ', num_units.get_val())
+        # print('rev = ', rev.get_val())
+        # print('price = ', price.get_val())
         err = 0.000000000001
         assert abs(num_units.get_val() - 15.778556148876199) <= err
         assert abs(rev.get_val() - 1841.3770500257765) <= err
@@ -681,9 +682,9 @@ class Assign01UnitTests(unittest.TestCase):
         num_units, rev, price = \
                    maximize_revenue(dmndf_expr,
                                     constraint=lambda x: 0 <= x <= 70)
-        print('x = ', num_units.get_val())
-        print('rev = ', rev.get_val())
-        print('price = ', price.get_val())
+        # print('x = ', num_units.get_val())
+        # print('rev = ', rev.get_val())
+        # print('price = ', price.get_val())
         err = 0.000000000001
         assert abs(num_units.get_val() - 21.80107916810982) <= err
         assert abs(rev.get_val() - 3344.199278613588) <= err
@@ -695,11 +696,11 @@ class Assign01UnitTests(unittest.TestCase):
         dmndf_expr = make_plus(make_prod(make_const(-0.5),
                                          make_pwr('x', 1.0)),
                                make_const(6.0))
-        print(dmndf_expr)
+        # print(dmndf_expr)
         num_units, rev, price = maximize_revenue(dmndf_expr,
                                                  constraint=lambda x: 0 <= x <= 10)
         err = 0.0001
-        print('x = ', num_units.get_val())
+        # print('x = ', num_units.get_val())
 
         assert abs(num_units.get_val() - 6.0) <= err
         assert abs(rev.get_val() - 18.0) <= err
@@ -711,7 +712,7 @@ class Assign01UnitTests(unittest.TestCase):
         dmndf_expr = make_plus(make_prod(make_const(-1.0/200.0),
                                          make_pwr('x', 1.0)),
                                make_const(12.0))
-        print(dmndf_expr)
+        # print(dmndf_expr)
         num_units, rev, price = maximize_revenue(dmndf_expr,
                                                  constraint=lambda x: 0 <= x <= 1500)
         err = 0.0001
@@ -726,12 +727,12 @@ class Assign01UnitTests(unittest.TestCase):
         print('\n***** Assign 03: Problem 03: Unit Test 01 *****')
         yt = make_prod(make_const(0.02*math.pi),
                        make_pwr('r', 2.0))
-        print(yt)
+        # print(yt)
         dydt = dydt_given_x_dxdt(yt, make_const(150.0),
                                  make_const(20.0))
         assert not dydt is None
         assert isinstance(dydt, const)
-        print(dydt)
+        # print(dydt)
         err = 0.0001
         assert abs(dydt.get_val() - 376.991118431) <= err
         print('Assign 03: Problem 02: Unit Test 01: pass')
@@ -740,12 +741,12 @@ class Assign01UnitTests(unittest.TestCase):
         print('\n***** Assign 03: Problem 03: Unit Test 02 *****')
         yt = make_prod(make_const(0.04*math.pi),
                        make_pwr('r', 2.0))
-        print(yt)
+        # print(yt)
         dydt = dydt_given_x_dxdt(yt, make_const(120.0),
                                  make_const(25.0))
         assert not dydt is None
         assert isinstance(dydt, const)
-        print(dydt)
+        # print(dydt)
         err = 0.0001
         assert abs(dydt.get_val() - 753.982236862) <= err
         #assert abs(rev.get_val() - 7200.0) <= err
@@ -756,12 +757,12 @@ class Assign01UnitTests(unittest.TestCase):
         print('\n***** Assign 03: Problem 03: Unit Test 03 *****')
         yt = make_prod(make_const(0.003*math.pi),
                        make_pwr('r', 2.0))
-        print(yt)
+        # print(yt)
         dydt = dydt_given_x_dxdt(yt, make_const(175.0),
                                  make_const(30.0))
         assert not dydt is None
         assert isinstance(dydt, const)
-        print(dydt)
+        # print(dydt)
         err = 0.0001
         assert abs(dydt.get_val() - 98.9601685881) <= err
         print('Assign 03: Problem 03: Unit Test 03: pass')
@@ -772,12 +773,12 @@ class Assign01UnitTests(unittest.TestCase):
         print('\n***** Assign 03: Problem 04: Unit Test 01 *****')
         yt = make_prod(make_const(0.003*math.pi),
                     make_pwr('r', 3.0))
-        print(yt)
+        # print(yt)
         dydt = dydt_given_x_dxdt(yt, make_const(10.3),
                                  make_const(-1.75))
         assert not dydt is None
         assert isinstance(dydt, const)
-        print(dydt)
+        # print(dydt)
         err = 0.0001
         assert abs(dydt.get_val() + 5.24934214275) <= err
         print('Assign 03: Problem 04: Unit Test 01: pass')
@@ -786,12 +787,12 @@ class Assign01UnitTests(unittest.TestCase):
         print('\n***** Assign 03: Problem 04: Unit Test 02 *****')
         yt = make_prod(make_const(0.05*math.pi),
                     make_pwr('r', 3.0))
-        print(yt)
+        # print(yt)
         dydt = dydt_given_x_dxdt(yt, make_const(11.5),
                                  make_const(-2.75))
         assert not dydt is None
         assert isinstance(dydt, const)
-        print(dydt)
+        # print(dydt)
         err = 0.0001
         assert abs(dydt.get_val() + 171.38369673) <= err
         print('Assign 03: Problem 04: Unit Test 02: pass')
@@ -800,15 +801,109 @@ class Assign01UnitTests(unittest.TestCase):
         print('\n***** Assign 03: Problem 04: Unit Test 03 *****')
         yt = make_prod(make_const(0.0075*math.pi),
                     make_pwr('r', 3.0))
-        print(yt)
+        # print(yt)
         dydt = dydt_given_x_dxdt(yt, make_const(5.5),
                                  make_const(-1.25))
         assert not dydt is None
         assert isinstance(dydt, const)
-        print(dydt)
+        # print(dydt)
         err = 0.0001
         assert abs(dydt.get_val() + 2.67280812481) <= err
         print('Assign 03: Problem 04: Unit Test 03: pass')
+
+    ##########################################################
+    # def unit tests for assign 4
+    ##########################################################
+
+    def test_assign_04_prob_01_ut_01_0(self):
+        print('\n***** Assign 04: Problem 01: Unit Test 01 *****')
+        fex = make_e_expr(make_prod(make_const(5.0),
+        make_pwr('x', 1.0)))
+        # print(fex)
+        drv = deriv(fex)
+        assert not drv is None
+        # print(drv)
+        drvf = tof(drv)
+        assert not drvf is None
+        gt = lambda x: 5.0*(math.e**(5.0*x))
+        for i in range(10):
+            # print(drvf(i), gt(i))
+            assert abs(gt(i) - drvf(i)) <= 0.001
+        print('Assign 04: Problem 01: Unit Test 01: pass')
+
+    def test_assign_04_prob_01_ut_02_0(self):
+        print('\n***** Assign 04: Problem 01: Unit Test 02 *****')
+        fex = make_e_expr(make_plus(make_pwr('x', 2.0),
+        make_const(-1.0)))
+        # print(fex)
+        drv = deriv(fex)
+        assert not drv is None
+        # print(drv)
+        drvf = tof(drv)
+        assert not drvf is None
+        gt = lambda x: 2*x*(math.e**(x**2 - 1.0))
+        err = 0.0001
+        for i in range(10):
+            # print(drvf(i), gt(i))
+            assert abs(gt(i) - drvf(i)) <= err
+        print('Assign 04: Problem 01: Unit Test 02: pass')
+
+    def test_assign_04_prob_01_ut_03_0(self):
+        print('\n***** Assign 04: Problem 01: Unit Test 03 *****')
+        fex1 = make_quot(make_const(-1.0), make_pwr('x', 1.0))
+        fex2 = make_e_expr(make_plus(make_pwr('x', 1.0), fex1))
+        # print(fex2)
+        drv = deriv(fex2)
+        assert not drv is None
+        # print(drv)
+        drvf = tof(drv)
+        assert not drvf is None
+        def gt_drvf(x):
+            d = (x - 1.0/x)
+            return (math.e**d)*(1.0 + 1.0/(x**2))
+        err = 0.0001
+        for i in range(1, 10):
+            # print drvf(i), gt_drvf(i)
+            assert abs(gt_drvf(i) - drvf(i)) <= err
+        print('Assign 04: Problem 01: Unit Test 03: pass')
+
+    def test_assign_04_prob_01_ut_04_0(self):
+        print('\n***** Assign 04: Problem 01: Unit Test 04 *****')
+        n = make_prod(make_const(3.0),
+        make_e_expr(make_prod(make_const(2.0),
+        make_pwr('x', 1.0))))
+        d = make_plus(make_const(1.0), make_pwr('x', 2.0))
+        fex = make_quot(n, d)
+        # print(fex)
+        drv = deriv(fex)
+        assert not drv is None
+        # print(drv)
+        drvf = tof(drv)
+        assert not drvf is None
+        def gt_drvf(x):
+            n = 6.0*(math.e**(2.0*x))*(x**2 - x + 1.0)
+            d = (1 + x**2)**2
+            return n/d
+        for i in range(-10, 10):
+            # print drvf(i), gt_drvf(i)
+            assert abs(gt_drvf(i) - drvf(i)) <= 0.001
+        print('Assign 04: Problem 01: Unit Test 04: pass')
+
+    def test_assign_04_prob_01_ut_05_0(self):
+        print('\n***** Assign 04: Problem 01: Unit Test 05 *****')
+        fex = make_pwr_expr(make_ln(make_pwr('x', 1.0)), 5.0)
+        print(fex)
+        drv = deriv(fex)
+        assert not drv is None
+        print(drv)
+        drvf = tof(drv)
+        assert not drvf is None
+        gt = lambda x: (5.0*(math.log(x, math.e)**4))/x
+        err = 0.0001
+        for i in range(1, 5):
+            print(drvf(i), gt(i))
+            assert abs(gt(i) - drvf(i)) <= err
+        print('Assign 04: Problem 01: Unit Test 05: pass')
 
     def runTest(self):
         pass
