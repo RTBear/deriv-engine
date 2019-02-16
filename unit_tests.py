@@ -991,7 +991,7 @@ class Assign01UnitTests(unittest.TestCase):
         make_pwr('x', 1.0)),
         make_const(5.0))
         fex = make_prod(fex1, make_prod(fex2, fex3))
-        # print(fex)
+        print(fex)
         drv = logdiff(fex)
         assert not drv is None
         # print(drv)

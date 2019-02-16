@@ -72,23 +72,23 @@ def loc_xtrm_2nd_drv_test(expr):
         zeros = find_poly_1_zeros(drv)
         # print '1st degree poly'
     except Exception:
-        # print 'not a 1st degree poly'
+        print('not a 1st degree poly')
         pass
 
     try:
         zeros = find_poly_2_zeros(drv)
         # print '2nd degree poly'
     except Exception:
-        # print 'not a 2nd degree poly'
+        print('not a 2nd degree poly')
         pass
 
 
     if isinstance(zeros,const):
         zeros = [zeros]
     
-    # print 'zeros:'
-    # for z in zeros:
-    #     print ':',z.get_val()
+    print('zeros:')
+    for z in zeros:
+        print(':',z.get_val())
 
     f = tof(expr)
     f_dp = tof(drv_2)
@@ -111,7 +111,7 @@ def loc_xtrm_1st_drv_test_lmda(expr,rng):
     zeros = zeros_for_lambda_range(tof(deriv(expr)),rng)
     print('zeros',zeros)
 
-    print "expr:",expr
+    print("expr:",expr)
     f = tof(expr)
 
     delta = 0.1
@@ -135,11 +135,11 @@ def zeros_for_lambda_range(lmda, rng):
     
     zeros = [abs(lmda(x)) < .001 for x in lambda_x_range]
     z = [(float(i) / len(lambda_x_range))*rng[1] for i, zero in enumerate(zeros) if zero == True]
-    print z
+    # print(z)
     for i,val in enumerate(z):
         # print round(val)
         # print abs(round(val) - val)
         if abs(round(val) - val) < .001:
             z[i] = int(round(val))
-    print z
+    # print z
     return z
