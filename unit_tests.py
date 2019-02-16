@@ -21,6 +21,7 @@ from point2d import point2d
 from derivtest import loc_xtrm_1st_drv_test, loc_xtrm_2nd_drv_test
 from infl import find_infl_pnts
 from hw03 import maximize_revenue,dydt_given_x_dxdt
+from hw05 import expected_rev_dir,c14_carbon_dating,demand_elasticity,find_growth_model,is_demand_elastic,radioactive_decay,solve_pdeq,solve_pdeq_with_init_cond
 # from graphdrv import graph_drv
 
 class Assign01UnitTests(unittest.TestCase):
@@ -1256,6 +1257,73 @@ class Assign01UnitTests(unittest.TestCase):
             #print(drvf(i), gt_drvf(i))
             assert abs(gt_drvf(i) - drvf(i)) <= 0.001
         print('HW4 Problem 02: UT 03: pass')
+    
+    def test_assign_05_prob_01_ut_1_0(self):
+        print('\n***** Assign 05: Problem 01: Unit Test 1 *****')
+        eq = solve_pdeq(make_const(1.0), make_const(1.0))
+        assert not eq is None
+        # print(eq)
+        eqf = tof(eq)
+        assert not eqf is None
+        err = 0.0001
+        gt = lambda t: math.e**t
+        for t in range(100):
+            assert abs(gt(t) - eqf(t)) <= err
+        print('Assign 05: Problem 01: Unit Test 1: pass')
+
+    def test_assign_05_prob_01_ut_2_0(self):
+        print('\n***** Assign 05: Problem 01: Unit Test 2 *****')
+        eq = solve_pdeq(make_const(4.0), make_const(1.0/3.0))
+        assert not eq is None
+        # print(eq)
+        eqf = tof(eq)
+        assert not eqf is None
+        gt = lambda t: math.e**((1.0/12.0)*t)
+        for t in range(100):
+            assert abs(gt(t) - eqf(t)) <= 0.0001
+        print('Assign 05: Problem 01: Unit Test 2: pass')
+
+    def test_assign_05_prob_01_ut_3_0(self):
+        print('\n***** Assign 05: Problem 01: Unit Test 3 *****')
+        eq = solve_pdeq_with_init_cond(make_const(1.0),
+        make_const(3.0))
+        assert not eq is None
+        # print(eq)
+        eqf = tof(eq)
+        assert not eqf is None
+        def gt(t): return math.e**(3.0*t)
+        err = 0.0001
+        for t in range(100):
+            assert abs(gt(t) - eqf(t)) <= err
+        print('Assign 05: Problem 01: Unit Test 3: pass')
+
+    def test_assign_05_prob_04_ut_1_0(self):
+        print('\n***** Assign 05: Problem 04: Unit Test 1 *****')
+        age = c14_carbon_dating(make_const(0.8))
+        assert not age is None
+        # print(age)
+        gt = 1860
+        err = 0.0001
+        assert abs(gt - age.get_val()) <= err
+        print('Assign 05: Problem 04: Unit Test 1: pass')
+
+    def test_assign_05_prob_05_ut_1_0(self):
+        print('\n***** Assign 05: Problem 05: Unit Test 1 *****')
+        price = const(30.0)
+        demand_eq = plus(const(100.0), prod(const(-2.0),make_pwr('x',1.0)))
+        el = demand_elasticity(demand_eq, price)
+        # print(is_demand_elastic(demand_eq, price))
+        # print('exp dir +1')
+        # print(expected_rev_dir(demand_eq, price, const(1)))
+        # print('exp dir -1')
+        # print(expected_rev_dir(demand_eq, price, const(-1)))
+
+        assert not el is None
+        # print(el)
+        gt = 3.0/2.0
+        err = 0.0001
+        assert abs(gt - el.get_val()) <= err
+        print('Assign 05: Problem 05: Unit Test 1: pass')
 
     def runTest(self):
         pass
