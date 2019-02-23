@@ -99,16 +99,22 @@ def quot_tof(expr):
         elif is_valid_non_const_var_expr(right):
             return lambda x: left.get_val() / tof(right)(x)
         else:
-            raise Exception('prod_tof: case 2:' + str(expr))
+            raise Exception('quot_tof: case 2:' + str(expr))
     elif is_valid_non_const_expr(left):
         if isinstance(right, const):
             return lambda x: tof(left)(x) / right.get_val()
         elif is_valid_non_const_expr(right):
             return lambda x: tof(left)(x) / tof(right)(x)
         else:
-            raise Exception('prod_tof: case 3:' + str(expr))
+            print('here')
+            print(type(expr))
+            print('left')
+            print(type(left))
+            print('right')
+            print(type(right))
+            raise Exception('quot_tof: case 3:' + str(expr))
     else:
-        raise Exception('prod_tof: case 1:' + str(expr))
+        raise Exception('quot_tof: case 1:' + str(expr))
 def prod_tof(expr):
     assert isinstance(expr, prod)
     left = expr.get_mult1()
@@ -146,16 +152,16 @@ def plus_tof(expr):
         elif is_valid_non_const_var_expr(right):
             return lambda x: left.get_val() + tof(right)(x)
         else:
-            raise Exception('prod_tof: case 2:' + str(expr))
+            raise Exception('plus_tof: case 2:' + str(expr))
     elif is_valid_non_const_expr(left):
         if isinstance(right, const):
             return lambda x: tof(left)(x) + right.get_val()
         elif is_valid_non_const_expr(right):
             return lambda x: tof(left)(x) + tof(right)(x)
         else:
-            raise Exception('prod_tof: case 3:' + str(expr))
+            raise Exception('plus_tof: case 3:' + str(expr))
     else:
-        raise Exception('prod_tof: case 1:' + str(expr))
+        raise Exception('plus_tof: case 1:' + str(expr))
 
 
     

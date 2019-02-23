@@ -58,7 +58,7 @@ def find_growth_model(p0, t, n):
     #n  is k
     #t  is t
 
-    return prod(p0,make_e_expr(prod(n,t)))
+    return prod(p0,make_e_expr(prod(quot(ln(n),t),make_pwr('t',1))))
 
 ############################# Problem 3 ##############################
 
@@ -68,7 +68,7 @@ def radioactive_decay(lmbda, p0, t):
     assert isinstance(t, const)
 
     #exponential decay is P(t) = p0 * e^(-lambda * t) 
-    return prod(p0,make_e_expr(prod(lmbda,t)))
+    return prod(p0,make_e_expr(prod(lmbda,make_pwr('t',1))))
 
 ############################# Problem 4 ##############################
 
