@@ -22,6 +22,7 @@ from derivtest import loc_xtrm_1st_drv_test, loc_xtrm_2nd_drv_test
 from infl import find_infl_pnts
 from hw03 import maximize_revenue,dydt_given_x_dxdt
 from hw05 import expected_rev_dir,c14_carbon_dating,demand_elasticity,find_growth_model,is_demand_elastic,radioactive_decay,solve_pdeq,solve_pdeq_with_init_cond
+from antideriv import antideriv
 # from graphdrv import graph_drv
 
 class Assign01UnitTests(unittest.TestCase):
@@ -1656,6 +1657,38 @@ class Assign01UnitTests(unittest.TestCase):
         print(expected_rev_dir(demand_eq, make_const(20.0), make_const(-1.0)))
         print(expected_rev_dir(demand_eq, make_const(20.0), make_const(+1.0)))
         print('Assign 05: Problem 05: Unit Test 02: pass')
+
+    def test_assign_07_prob_01_ut_01(self):
+        print('\n***** Assign 07: Problem 01: Unit Test 01 *****')
+        fex = make_pwr('x', 2.0)
+        # print(fex)
+        afex = antideriv(fex)
+        assert not afex is None
+        def gt(x): return (1.0/3.0)*(x**3.0)
+        afexf = tof(afex)
+        assert not afexf is None
+        err = 0.0001
+        for i in range(1, 101):
+            assert abs(afexf(i) - gt(i)) <= err
+            # print(afex)
+        print('Assign 07: Problem 01: Unit Test 01: pass')
+
+    def test_assign_07_prob_01_ut_02(self):
+        print('\n***** Assign 07: Problem 01: Unit Test 02 *****')
+        fex = make_e_expr(make_prod(make_const(-2.0),
+        make_pwr('x', 1.0)))
+        print(fex)
+        afex = antideriv(fex)
+        assert not afex is None
+        print(afex)
+        def gt(x): return (-0.5)*(math.e**(-2.0*x))
+        afexf = tof(afex)
+        assert not afexf is None
+        err = 0.0001
+        for i in range(0, 101):
+            assert abs(afexf(i) - gt(i)) <= err
+            print(afex)
+        print('Assign 07: Problem 01: Unit Test 02: pass')
 
     def runTest(self):
         pass
