@@ -32,8 +32,7 @@ def antideriv(i):
         if isinstance(b, var) and isinstance(d, const):
             #(b^(d+1))/(d+1)
             if d.get_val() == -1.0:
-                raise Exception('cannot divide by zero')
-
+                return ln(make_pwr('x',1.0))
             return quot(pwr(b,const(d.get_val()+1.0)),const(d.get_val()+1.0))
         ## CASE 2.2: b is e
         elif is_e_const(b):
@@ -49,10 +48,10 @@ def antideriv(i):
                     right = d.get_mult2()
                     if isinstance(left, var) or (isinstance(left, pwr) and left.get_deg().get_val() == 1.0):
                         # e^xa == e^ax => (1/a) * e^ax
-                        return prod(quot(const(1.0),right),make_e_expr(left))
+                        return prod(quot(const(1.0),right),i)
                     elif isinstance(right, var) or (isinstance(right, pwr) and right.get_deg().get_val() == 1.0):
                         # e^ax => (1/a) * e^ax
-                        return prod(quot(const(1.0),left),make_e_expr(right))
+                        return prod(quot(const(1.0),left),i)
                     else:
                         raise Exception('e^(unknown expression)')
                 else:

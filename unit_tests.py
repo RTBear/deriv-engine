@@ -1677,18 +1677,66 @@ class Assign01UnitTests(unittest.TestCase):
         print('\n***** Assign 07: Problem 01: Unit Test 02 *****')
         fex = make_e_expr(make_prod(make_const(-2.0),
         make_pwr('x', 1.0)))
-        print(fex)
+        # print(fex)
         afex = antideriv(fex)
         assert not afex is None
-        print(afex)
+        # print(afex)
         def gt(x): return (-0.5)*(math.e**(-2.0*x))
         afexf = tof(afex)
         assert not afexf is None
         err = 0.0001
         for i in range(0, 101):
             assert abs(afexf(i) - gt(i)) <= err
-            print(afex)
+            # print(afex)
         print('Assign 07: Problem 01: Unit Test 02: pass')
+
+    def test_assign_07_prob_01_ut_03(self):
+        print('\n***** Assign 07: Problem 01: Unit Test 03 *****')
+        fex = make_pwr('x', 0.5)
+        # print(fex)
+        afex = antideriv(fex)
+        assert not afex is None
+        def gt(x): return (2.0/3.0)*(x**(3.0/2.0))
+        afexf = tof(afex)
+        assert not afexf is None
+        err = 0.0001
+        for i in range(1, 101):
+            assert abs(afexf(i) - gt(i)) <= err
+            # print(afex)
+        print('Assign 07: Problem 01: Unit Test 03: pass')
+
+    def test_assign_07_prob_01_ut_04(self):
+        print('\n***** Assign 07: Problem 01: Unit Test 04 *****')
+        fex = make_pwr('x', -2.0)
+        # print(fex)
+        afex = antideriv(fex)
+        assert not afex is None
+        def gt(x): return -1.0/x
+        afexf = tof(afex)
+        assert not afexf is None
+        err = 0.0001
+        for i in range(1, 101):
+            assert abs(afexf(i) - gt(i)) <= err
+            # print(afex)
+        print('Assign 07: Problem 01: Unit Test 04: pass')
+
+    def test_assign_07_prob_01_ut_05(self):
+        print('\n***** Assign 07: Problem 01: Unit Test 05 *****')
+        fex = make_pwr('x', -1.0)
+        # print(fex)
+        afex = antideriv(fex)
+        assert not afex is None
+        # print(afex)
+        afexf = tof(afex)
+        assert not afexf is None
+        def gt(x): return math.log(abs(x), math.e)
+        err = 0.0001
+        for i in range(1, 101):
+            assert abs(afexf(i) - gt(i)) <= err
+        for i in range(-100, 0):
+            # print(afexf(i),gt(i))
+            assert abs(afexf(i) - gt(i)) <= err
+        print('Assign 07: Problem 01: Unit Test 05: pass')
 
     def runTest(self):
         pass

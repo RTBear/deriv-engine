@@ -58,7 +58,9 @@ def absv_tof(expr):
 def ln_tof(expr):
     assert isinstance(expr, ln)
     inner = expr.get_expr()
-    return lambda x: math.log(tof(inner)(x))
+    # print(tof(inner)(15))
+    # print(math.log(0))
+    return lambda x: math.log(tof(inner)(abs(x)))
 
 def pwr_tof(expr):
     assert isinstance(expr, pwr)
