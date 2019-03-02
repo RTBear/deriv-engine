@@ -1658,7 +1658,7 @@ class Assign01UnitTests(unittest.TestCase):
         print(expected_rev_dir(demand_eq, make_const(20.0), make_const(+1.0)))
         print('Assign 05: Problem 05: Unit Test 02: pass')
 
-    def test_assign_07_prob_01_ut_01(self):
+    def test_assign_07_prob_01_ut_01_0(self):
         print('\n***** Assign 07: Problem 01: Unit Test 01 *****')
         fex = make_pwr('x', 2.0)
         # print(fex)
@@ -1673,7 +1673,7 @@ class Assign01UnitTests(unittest.TestCase):
             # print(afex)
         print('Assign 07: Problem 01: Unit Test 01: pass')
 
-    def test_assign_07_prob_01_ut_02(self):
+    def test_assign_07_prob_01_ut_02_0(self):
         print('\n***** Assign 07: Problem 01: Unit Test 02 *****')
         fex = make_e_expr(make_prod(make_const(-2.0),
         make_pwr('x', 1.0)))
@@ -1690,7 +1690,7 @@ class Assign01UnitTests(unittest.TestCase):
             # print(afex)
         print('Assign 07: Problem 01: Unit Test 02: pass')
 
-    def test_assign_07_prob_01_ut_03(self):
+    def test_assign_07_prob_01_ut_03_0(self):
         print('\n***** Assign 07: Problem 01: Unit Test 03 *****')
         fex = make_pwr('x', 0.5)
         # print(fex)
@@ -1705,7 +1705,7 @@ class Assign01UnitTests(unittest.TestCase):
             # print(afex)
         print('Assign 07: Problem 01: Unit Test 03: pass')
 
-    def test_assign_07_prob_01_ut_04(self):
+    def test_assign_07_prob_01_ut_04_0(self):
         print('\n***** Assign 07: Problem 01: Unit Test 04 *****')
         fex = make_pwr('x', -2.0)
         # print(fex)
@@ -1720,7 +1720,7 @@ class Assign01UnitTests(unittest.TestCase):
             # print(afex)
         print('Assign 07: Problem 01: Unit Test 04: pass')
 
-    def test_assign_07_prob_01_ut_05(self):
+    def test_assign_07_prob_01_ut_05_0(self):
         print('\n***** Assign 07: Problem 01: Unit Test 05 *****')
         fex = make_pwr('x', -1.0)
         # print(fex)
@@ -1737,6 +1737,81 @@ class Assign01UnitTests(unittest.TestCase):
             # print(afexf(i),gt(i))
             assert abs(afexf(i) - gt(i)) <= err
         print('Assign 07: Problem 01: Unit Test 05: pass')
+
+    def test_assign_07_prob_01_ut_06_0(self):
+        print('\n***** Assign 07: Problem 01: Unit Test 06 *****')
+        fex1 = make_pwr('x', -3.0)
+        fex2 = make_prod(make_const(7.0),
+                         make_e_expr(make_prod(make_const(5.0),
+                                               make_pwr('x', 1.0))))
+        fex3 = make_prod(make_const(4.0),
+                         make_pwr('x', -1.0))
+        fex4 = make_plus(fex1, fex2)
+        fex = make_plus(fex4, fex3)
+        # print(fex)
+        afex = antideriv(fex)
+        assert not afex is None
+        # print(afex)
+        def gt(x):
+            v1 = -0.5*(x**(-2.0))
+            v2 = (7.0/5.0)*(math.e**(5.0*x))
+            v3 = 4.0*(math.log(abs(x), math.e))
+            return v1 + v2 + v3
+        afexf = tof(afex)
+        assert not afexf is None
+        err = 0.002
+        for i in range(1, 7):
+            # print(i,afexf(i), gt(i),abs(afexf(i) - gt(i)))
+            assert abs(afexf(i) - gt(i)) <= err
+        print('Assign 07: Problem 01: Unit Test 06: pass')
+
+    def test_assign_07_prob_01_ut_07_0(self):
+        print('\n***** Assign 07: Problem 01: Unit Test 07 *****')
+        fex = make_prod(make_const(4.0), make_pwr('x', 3.0))
+        # print(fex)
+        afex = antideriv(fex)
+        assert not afex is None
+        # print(afex)
+        fexf = tof(fex)
+        assert not fexf is None
+        fex2 = deriv(afex)
+        assert not fex2 is None
+        # print(fex2)
+        fex2f = tof(fex2)
+        assert not fex2f is None
+        err = 0.0001
+        for i in range(11):
+            assert abs(fexf(i) - fex2f(i)) <= err
+        print('Assign 07: Problem 01: Unit Test 07: pass')
+
+    def test_assign_07_prob_01_ut_08_0(self):
+        print('\n***** Assign 07: Problem 01: Unit Test 08 *****')
+        fex1 = make_plus(make_prod(make_const(5.0),
+                                    make_pwr('x', 1.0)),
+                        make_const(-7.0))
+        fex = make_pwr_expr(fex1, -2.0)
+        # print(fex)
+        afex = antideriv(fex)
+        assert not afex is None
+        # print(afex)
+        afexf = tof(afex)
+        err = 0.0001
+        def gt(x):
+            return (-1.0/5.0)*((5*x - 7.0)**-1)
+        for i in range(1, 100):
+            # print(afexf(i) , gt(i))
+            assert abs(afexf(i) - gt(i)) <= err
+        fexf = tof(fex)
+        assert not fexf is None
+        fex2 = deriv(afex)
+        assert not fex2 is None
+        # print(fex2)
+        fex2f = tof(fex2)
+        assert not fex2f is None
+        for i in range(1, 100):
+            # print(fexf(i) , fex2f(i))
+            assert abs(fexf(i) - fex2f(i)) <= err
+        print('Assign 07: Problem 01: Unit Test 07: pass')
 
     def runTest(self):
         pass

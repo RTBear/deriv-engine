@@ -15,6 +15,7 @@ from plus import plus
 from quot import quot
 from ln import ln
 from absv import absv
+from deriv import deriv
 from maker import make_const, make_pwr, make_pwr_expr, make_e_expr
 from tof import is_valid_non_const_expr, is_valid_non_const_var_expr
 import math
@@ -23,7 +24,7 @@ import math
 def antideriv(i):
     ## CASE 1: i is a constant
     if isinstance(i, const):
-        return pwr('x',i)
+        return prod(i,make_pwr('x',1.0))
     ## CASE 2: i is a pwr
     elif isinstance(i, pwr):
         b = i.get_base()
@@ -59,13 +60,16 @@ def antideriv(i):
         ## CASE 2.3: b is a sum
         elif isinstance(b, plus):
             #(x+y)^d => ((x+y)^(d+1))/(d+1)
-            return quot(make_pwr_expr(b,const(d.get_val()+1.0)),const(d.get_val()+1.0))
+            if isinstance(d, const):
+                return prod(pwr(deriv(b),const(d.get_val()+1.0)) , quot(make_pwr_expr(b,const(d.get_val()+1.0)),const(d.get_val()+1.0)))
+            else:
+                raise Exception('antideriv: unknown case')
         else:
             raise Exception('antideriv: unknown case')
     ### CASE 3: i is a sum, i.e., a plus object.
     elif isinstance(i, plus):
         # S(n+m) => S(n) + S(m)
-        return plus(antideriv(i.get_elt1),antideriv(i.get_elt2))
+        return plus(antideriv(i.get_elt1()),antideriv(i.get_elt2()))
 
     ### CASE 4: is is a product, i.e., prod object,
     ### where the 1st element is a constant.
@@ -79,7 +83,7 @@ def antideriv(i):
         else:
             raise Exception('antideriv: unknown case -- did not implement special rules (like substitution)')
     else:
-        raise Exception('antideriv: unknown case')
+        raise Exception('antideriv: unknown case' + str(type(i)) + str(i))
 
                      
             

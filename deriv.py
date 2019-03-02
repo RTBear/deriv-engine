@@ -134,7 +134,9 @@ def pwr_deriv(p):
             # d/dx(e^f(x)) = f`(x)*e^f(x)
             return flattenProduct(prod( deriv(d), p )) #where d is f`(x) and p is e^f(x), ie the original expression
         else:
-            raise Exception('pwr_deriv: case 2: ' + str(p))
+            raise Exception('pwr_deriv: case 4: ' + str(p))
+    elif isinstance(b, const) and isinstance(d, const):
+        return make_const(0.0)# d/dx(c^c) = 0
     else:
         raise Exception('power_deriv: case 3: ' + str(p) + ' --type-- ' + str(type(b)))
 
@@ -148,14 +150,16 @@ def prod_deriv(p):
     if isinstance(m1, const):# ie: 2 * x
         if isinstance(m2, const):# ie: 2 * 4
             return make_const(0.0)
-        elif isinstance(m2, pwr):
-            #m1*drv(m2)
+        elif is_valid_non_const_expr(m2):
             return flattenProduct(prod(m1,deriv(m2)))
-        elif isinstance(m2, plus):
-            #(f*g)' = f'*g + f*g' but f is a constant so...
-            return flattenProduct(prod(m1,deriv(m2)))
-        elif isinstance(m2, prod):
-            return flattenProduct(prod(m1,deriv(m2)))
+        # elif isinstance(m2, pwr):
+        #     #m1*drv(m2)
+        #     return flattenProduct(prod(m1,deriv(m2)))
+        # elif isinstance(m2, plus):
+        #     #(f*g)' = f'*g + f*g' but f is a constant so...
+        #     return flattenProduct(prod(m1,deriv(m2)))
+        # elif isinstance(m2, prod):
+            # return flattenProduct(prod(m1,deriv(m2)))
         else:
             raise Exception('prod_deriv: case 1' + str(p))
     # elif isinstance(m1, plus):
