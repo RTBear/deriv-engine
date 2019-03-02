@@ -67,10 +67,18 @@ def antideriv(i):
                 else:
                     # return prod(pwr(deriv(b),const(d.get_val()+1.0)) , quot(make_pwr_expr(b,const(d.get_val()+1.0)),const(d.get_val()+1.0)))
                     # return prod(make_pwr_expr(prod(deriv(b),const(d.get_val()+1.0)), -1.0) , quot(make_pwr_expr(b,const(d.get_val()+1.0)),const(d.get_val()+1.0)))
-                    return prod(make_pwr_expr(prod(deriv(b),
-                                                   const(d.get_val()+1.0)),
-                                              -1.0),
-                                make_pwr_expr(b,const(d.get_val()+1.0)))
+
+                    # formula from this page (https://www.quora.com/How-do-I-find-anti-derivative-of-ax+b-2)
+                    return prod(
+                                make_pwr_expr(
+                                    prod(
+                                        deriv(b),
+                                            const(d.get_val()+1.0)
+                                    ),
+                                    -1.0
+                                ),
+                                make_pwr_expr(b, const(d.get_val()+1.0))
+                           )
             else:
                 raise Exception('antideriv: unknown case')
         else:

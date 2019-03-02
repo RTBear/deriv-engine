@@ -1845,22 +1845,22 @@ class Assign01UnitTests(unittest.TestCase):
         fex0 = make_prod(make_const(3.0), make_pwr('x', 1.0))
         fex1 = make_plus(fex0, make_const(2.0))
         fex = make_pwr_expr(fex1, 4.0)
-        print(fex)
+        # print(fex)
         afex = antideriv(fex)
         assert not afex is None
-        print(afex)
+        # print(afex)
         afexf = tof(afex)
         err = 0.0001
         def gt(x):
             return (1.0/15)*((3*x + 2.0)**5)
         for i in range(1, 10):
-            print(afexf(i) , gt(i))
+            # print(afexf(i) , gt(i))
             assert abs(afexf(i) - gt(i)) <= err
         fexf = tof(fex)
         assert not fexf is None
         fex2 = deriv(afex)
         assert not fex2 is None
-        print(fex2)
+        # print(fex2)
         fex2f = tof(fex2)
         assert not fex2f is None
         # for i in range(1, 1000):
