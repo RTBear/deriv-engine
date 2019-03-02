@@ -61,7 +61,16 @@ def antideriv(i):
         elif isinstance(b, plus):
             #(x+y)^d => ((x+y)^(d+1))/(d+1)
             if isinstance(d, const):
-                return prod(pwr(deriv(b),const(d.get_val()+1.0)) , quot(make_pwr_expr(b,const(d.get_val()+1.0)),const(d.get_val()+1.0)))
+                if d.get_val() == -1.0:
+                    return prod(pwr(deriv(b),const(d.get_val()+1.0)) , ln(b) )
+                    # return prod(pwr(deriv(b),const(d.get_val()+1.0)) , quot(make_pwr_expr(b,const(d.get_val()+1.0)),const(d.get_val()+1.0)))
+                else:
+                    # return prod(pwr(deriv(b),const(d.get_val()+1.0)) , quot(make_pwr_expr(b,const(d.get_val()+1.0)),const(d.get_val()+1.0)))
+                    # return prod(make_pwr_expr(prod(deriv(b),const(d.get_val()+1.0)), -1.0) , quot(make_pwr_expr(b,const(d.get_val()+1.0)),const(d.get_val()+1.0)))
+                    return prod(make_pwr_expr(prod(deriv(b),
+                                                   const(d.get_val()+1.0)),
+                                              -1.0),
+                                make_pwr_expr(b,const(d.get_val()+1.0)))
             else:
                 raise Exception('antideriv: unknown case')
         else:

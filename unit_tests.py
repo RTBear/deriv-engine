@@ -1811,7 +1811,60 @@ class Assign01UnitTests(unittest.TestCase):
         for i in range(1, 100):
             # print(fexf(i) , fex2f(i))
             assert abs(fexf(i) - fex2f(i)) <= err
-        print('Assign 07: Problem 01: Unit Test 07: pass')
+        print('Assign 07: Problem 01: Unit Test 08: pass')
+    
+    def test_assign_07_prob_01_ut_09_0(self):
+        print('\n***** Assign 07: Problem 01: Unit Test 09 *****')
+        fex0 = make_plus(make_pwr('x', 1.0), make_const(2.0))
+        fex1 = make_pwr_expr(fex0, -1.0)
+        fex = make_prod(make_const(3.0), fex1)
+        # print(fex)
+        afex = antideriv(fex)
+        # print(afex)
+        err = 0.0001
+        afexf = tof(afex)
+        def gt(x):
+            return 3.0*math.log(abs(2.0 + x), math.e)
+        for i in range(1, 101):
+            assert abs(afexf(i) - gt(i)) <= err
+        assert not afex is None
+        # print(afex)
+        fexf = tof(fex)
+        assert not fexf is None
+        fex2 = deriv(afex)
+        assert not fex2 is None
+        # print(fex2)
+        fex2f = tof(fex2)
+        assert not fex2f is None
+        for i in range(1, 1000):
+            assert abs(fexf(i) - fex2f(i)) <= err
+        print('Assign 07: Problem 01: Unit Test 09: pass')
+
+    def test_assign_07_prob_01_ut_10_0(self):
+        print('\n***** Assign 07: Problem 01: Unit Test 10 *****')
+        fex0 = make_prod(make_const(3.0), make_pwr('x', 1.0))
+        fex1 = make_plus(fex0, make_const(2.0))
+        fex = make_pwr_expr(fex1, 4.0)
+        print(fex)
+        afex = antideriv(fex)
+        assert not afex is None
+        print(afex)
+        afexf = tof(afex)
+        err = 0.0001
+        def gt(x):
+            return (1.0/15)*((3*x + 2.0)**5)
+        for i in range(1, 10):
+            print(afexf(i) , gt(i))
+            assert abs(afexf(i) - gt(i)) <= err
+        fexf = tof(fex)
+        assert not fexf is None
+        fex2 = deriv(afex)
+        assert not fex2 is None
+        print(fex2)
+        fex2f = tof(fex2)
+        assert not fex2f is None
+        # for i in range(1, 1000):
+        print('Assign 07: Problem 01: Unit Test 10: pass')
 
     def runTest(self):
         pass
