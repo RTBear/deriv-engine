@@ -52,19 +52,48 @@ def grayscale(i, imglst):
     cv2.destroyAllWindows()
 
 def split_merge(i, imglst):
-    ## your code here
-    pass
+    cv2.imshow(imglst[i][0],imglst[i][1])
+
+    blue_channel, green_channel, red_channel = cv2.split(imglst[i][1])
+    zero_channel = np.zeros((len(imglst[i][1]),len(imglst[i][1][0])))
+
+    red_filter = np.dstack((zero_channel,zero_channel,red_channel))
+    blue_filter = np.dstack((blue_channel,zero_channel,zero_channel))
+    green_filter = np.dstack((zero_channel,green_channel,zero_channel))
+
+    cv2.imshow('Red', red_filter.astype('uint8'))#cv2 wants type 'uint8' and each filter is 'float64' by default
+    cv2.imshow('Blue', blue_filter.astype('uint8'))
+    cv2.imshow('Green', green_filter.astype('uint8'))
+
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
 def amplify(i, imglst, c, amount):
-    ## your code here
-    pass
+    assert c == 'b' or c == 'g' or c == 'r'
+    cv2.imshow(imglst[i][0],imglst[i][1])
+
+    if c == 'b':
+        amp_index = 0 
+    elif c == 'g':
+        amp_index = 1 
+    elif c == 'r':
+        amp_index = 2 
+
+    amp = imglst[i][1][:,:,:]
+    amp[:,:,amp_index] += amount
+
+    cv2.imshow('Amplified',amp)
+
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
 
 ## here is main for you to test your implementations.
 ## remember to destroy all windows after you are done.
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--ftype', help='filetype of images')
-    parser.add_argument('--imgdir', help='path to image directory')
+    parser.add_argument('--ftype', default='.jpg', nargs='?', help='filetype of images')#nargs='?' means 0 or 1 args
+    parser.add_argument('--imgdir', default='.', nargs='?', help='path to image directory')
 
     args = parser.parse_args()
 
@@ -76,9 +105,8 @@ if __name__ == '__main__':
     print len(il), il[0][1].shape
 
     #verify_img_list(il)
-    grayscale(0, il)
-    #split_merge(0, il)
-    #amplify(0, il, 'b', 200)
+    # grayscale(0, il)
+    # split_merge(0, il)
+    # amplify(0, il, 'b', 200)
     #cv2.waitKey()
     #cv2.destroyAllWindows()
-    pass
