@@ -2,17 +2,18 @@
 
 #########################################
 # module: hw07_s19.py
-# YOUR NAME
-# YOUR A#
+# Ryan Mecham
+# A01839282
 #########################################
 
-import math
-import numpy as np
 import argparse
-import cv2
-import sys
+import math
 import os
 import re
+import sys
+
+import cv2
+import numpy as np
 
 ## uses these command line options if you want to run your program
 ## in a command window.
@@ -36,12 +37,19 @@ def generate_file_names(ftype, rootdir):
             generate_file_names(ftype, d)
 
 def read_img_dir(ftype, imgdir):
-    ## your code here
-    pass
+    fnames = generate_file_names(ftype, imgdir)
+    image_files = []
+
+    for f in fnames:
+        image_files.append((f, cv2.imread(f)))
+
+    return image_files
 
 def grayscale(i, imglst):
-    ## your code here
-    pass
+    cv2.imshow(imglst[i][0],imglst[i][1])
+    cv2.imshow('Grayscaled', cv2.cvtColor(imglst[i][1], cv2.COLOR_BGR2GRAY))
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
 def split_merge(i, imglst):
     ## your code here
@@ -54,15 +62,23 @@ def amplify(i, imglst, c, amount):
 ## here is main for you to test your implementations.
 ## remember to destroy all windows after you are done.
 if __name__ == '__main__':
-    #il = read_img_dir(args['ftype'], args['imgdir'])
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--ftype', help='filetype of images')
+    parser.add_argument('--imgdir', help='path to image directory')
+
+    args = parser.parse_args()
+
+    print 'ftype:',args.ftype
+    print 'imgdir:',args.imgdir
+
+    il = read_img_dir(args.ftype, args.imgdir)
+    # print il[0]
+    print len(il), il[0][1].shape
+
     #verify_img_list(il)
-    #grayscale(0, il)
+    grayscale(0, il)
     #split_merge(0, il)
     #amplify(0, il, 'b', 200)
     #cv2.waitKey()
     #cv2.destroyAllWindows()
     pass
-    
-
-
- 
