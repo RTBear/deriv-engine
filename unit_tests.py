@@ -23,7 +23,8 @@ from infl import find_infl_pnts
 from hw03 import maximize_revenue,dydt_given_x_dxdt
 from hw05 import expected_rev_dir,c14_carbon_dating,demand_elasticity,find_growth_model,is_demand_elastic,radioactive_decay,solve_pdeq,solve_pdeq_with_init_cond
 from antideriv import antideriv
-# from graphdrv import graph_drv
+from riemann import *
+from graphdrv import graph_drv
 
 class Assign01UnitTests(unittest.TestCase):
 
@@ -134,38 +135,38 @@ class Assign01UnitTests(unittest.TestCase):
             assert abs(drvf(i) - gt(i)) <= err
         print('Assign 01: Unit Test 06: pass')
 
-    # def test_assgn_01_ut_001(self):
-    #     print('\n***** Assign 01: Unit Test 001 ************')
-    #     prd = prod(mult1=make_const(2.0),
-    #                mult2=make_pwr('x', 5.0))
-    #     # graph_drv(prd, [-3.0, 3.0], [-50, 50.0])
-    #     print('Assign 01: Unit Test 01: pass')
+    def test_assgn_01_ut_001(self):
+        print('\n***** Assign 01: Unit Test 001 ************')
+        prd = prod(mult1=make_const(2.0),
+                   mult2=make_pwr('x', 5.0))
+        # graph_drv(prd, [-3.0, 3.0], [-50, 50.0])
+        print('Assign 01: Unit Test 01: pass')
     
-    # def test_assgn_01_ut_002(self):
-    #     print('\n***** Assign 01: Unit Test 002 ************')
-    #     fex1 = make_pwr('x', 4.0)
-    #     fex2 = make_pwr('x', 3.0)
-    #     fex3 = make_pwr('x', 1.0)
-    #     fex4 = plus(elt1=fex1, elt2=fex2)
-    #     fex5 = plus(elt1=fex4, elt2=fex3)
-    #     # graph_drv(fex5, [-2.5, 2.5], [-10.0, 10.0])
-    #     print('Assign 01: Unit Test 02: pass')
+    def test_assgn_01_ut_002(self):
+        print('\n***** Assign 01: Unit Test 002 ************')
+        fex1 = make_pwr('x', 4.0)
+        fex2 = make_pwr('x', 3.0)
+        fex3 = make_pwr('x', 1.0)
+        fex4 = plus(elt1=fex1, elt2=fex2)
+        fex5 = plus(elt1=fex4, elt2=fex3)
+        # graph_drv(fex5, [-2.5, 2.5], [-10.0, 10.0])
+        print('Assign 01: Unit Test 02: pass')
 
-    # def test_assgn_01_prob_02_ut_03(self):
-    #     print('\n***** Assign 01: Unit Test 03 ************')
-    #     fex1 = prod(mult1=make_const(-1.0),
-    #                 mult2=make_pwr('x', 2.0))
-    #     fex2 = plus(elt1=fex1, elt2=make_const(2.0))
-    #     # graph_drv(fex2, [-10, 10], [-50.0, 25.0])
-    #     print('Assign 01: Unit Test 03: pass')
+    def test_assgn_01_prob_02_ut_03(self):
+        print('\n***** Assign 01: Unit Test 03 ************')
+        fex1 = prod(mult1=make_const(-1.0),
+                    mult2=make_pwr('x', 2.0))
+        fex2 = plus(elt1=fex1, elt2=make_const(2.0))
+        # graph_drv(fex2, [-10, 10], [-50.0, 25.0])
+        print('Assign 01: Unit Test 03: pass')
 
-    # def test_assgn_01_prob_02_ut_04(self):
-    #     print('\n***** Assign 01: Unit Test 04 ************')
-    #     fex1 = prod(mult1=make_const(2),
-    #                 mult2=make_pwr('x', 2.0))
-    #     fex2 = plus(elt1=fex1, elt2=make_const(2.0))
-    #     # graph_drv(fex2, [-10, 10], [-50.0, 50.0])
-    #     print('Assign 01: Unit Test 04: pass')
+    def test_assgn_01_prob_02_ut_04(self):
+        print('\n***** Assign 01: Unit Test 04 ************')
+        fex1 = prod(mult1=make_const(2),
+                    mult2=make_pwr('x', 2.0))
+        fex2 = plus(elt1=fex1, elt2=make_const(2.0))
+        # graph_drv(fex2, [-10, 10], [-50.0, 50.0])
+        print('Assign 01: Unit Test 04: pass')
 
     def test_assgn_02_prob_01_ut_01(self):
         print('\n***** Assign 02: Unit Test 01 ************')
@@ -1865,6 +1866,69 @@ class Assign01UnitTests(unittest.TestCase):
         assert not fex2f is None
         # for i in range(1, 1000):
         print('Assign 07: Problem 01: Unit Test 10: pass')
+
+    def test_assign_08_prob_01_ut_01_0(self):
+        print('\n***** Assign 08: Problem 01: Unit Test 01 *****')
+        fex = make_prod(make_const(3.0), make_pwr('x', 2.0))
+        fex = make_plus(fex, make_e_expr(make_pwr('x', 1.0)))
+        print(fex)
+        print("LEFT")
+        err_list = riemann_approx_with_gt(fex,
+        make_const(-1.0),
+        make_const(1.0),
+        make_const(4.35),
+        make_const(10),
+        pp=-1)
+        # for n, err in err_list:
+        #     print(n, err)
+        print('Assign 08: Problem 01: Unit Test 01: pass')
+
+    def test_assign_08_prob_01_ut_02_0(self):
+        print('\n***** Assign 08: Problem 01: Unit Test 02 *****')
+        fex = make_prod(make_const(3.0), make_pwr('x', 2.0))
+        fex = make_plus(fex, make_e_expr(make_pwr('x', 1.0)))
+        print(fex)
+        print("CENTER")
+
+        err_list = riemann_approx_with_gt(fex,
+                                        make_const(-1.0),
+                                        make_const(1.0), 
+                                        make_const(4.35), 
+                                        make_const(10), 
+                                        pp=0)
+
+        # for n, err in err_list:
+        #     print(n, err)
+        print('Assign 08: Problem 01: Unit Test 02: pass')
+
+    def test_assign_08_prob_01_ut_03_0(self):
+        print('\n***** Assign 08: Problem 01: Unit Test 03 *****')
+        fex = make_prod(make_const(3.0), make_pwr('x', 2.0))
+        fex = make_plus(fex, make_e_expr(make_pwr('x', 1.0)))
+        print(fex)
+        print("RIGHT")
+
+        err_list = riemann_approx_with_gt(fex, make_const(-1.0),
+                                            make_const(1.0),
+                                            make_const(4.35),
+                                            make_const(10),
+                                            pp=+1)
+        # for n, err in err_list:
+        #     print(n, err)
+        print('Assign 08: Problem 01: Unit Test 03: pass')
+
+    def test_assign_08_prob_01_ut_04_0(self):
+        print('\n***** Assign 08: Problem 01: Unit Test 04 *****')
+        fex = make_ln(make_pwr('x', 1.0))
+        print(fex)
+        err = 0.0001
+        approx = riemann_approx(fex,
+                                make_const(1.0),
+                                make_const(2.0),
+                                make_const(100),
+                                pp=0)
+        assert abs(approx.get_val() - 0.386296444432) <= err
+        print('Assign 08: Problem 01: Unit Test 04: pass')
 
     def runTest(self):
         pass

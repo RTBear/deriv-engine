@@ -103,6 +103,10 @@ def antideriv(i):
         raise Exception('antideriv: unknown case' + str(type(i)) + str(i))
 
                      
-            
+def antiderivdef(expr, a, b):
+    assert isinstance(a, const)
+    assert isinstance(b, const)
+    ## your code here
+    pass
     
     
