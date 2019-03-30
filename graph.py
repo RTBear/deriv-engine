@@ -23,9 +23,9 @@ import math
 
 def get_matplotlib_color(index=0):
     color_options = [
-        'b',#blue
-        'g',#green
         'r',#red
+        'g',#green
+        'b',#blue
         'c',#cyan
         'm',#magenta
         'y',#yellow
@@ -75,6 +75,29 @@ def graph_riemann_approx_err(approxs, xmin=-10, xmax=10, n=10, name='Graph of f(
         plt.ylim((min(yvals0),max(yvals0)))
         plt.xlim((xmin,xmax))
         plt.plot(xvals1, yvals0, label='y=f(x)='+['right','left','middle'][i%3], c=get_matplotlib_color(i)) 
+    plt.grid()
+    plt.legend(loc='best')
+    plt.show()
+
+def graphFromTable(xvals, data, labels, name=''):
+    '''
+    xvals: iterable where each entry is an x coordinate
+    data: iterable of iterable(s). Each inner iterable is a set of y coordinates for the corisponding x coords in xvals
+    labels: labels for each set in data
+    '''
+
+    ymin = 0
+    ymax = 0
+    for i,dataset in enumerate(data):
+        fig1 = plt.figure(1)
+        fig1.suptitle(name)
+        plt.xlabel('x')
+        plt.ylabel('y')
+        ymin = min(ymin, min(dataset))
+        ymax = max(ymax, max(dataset))
+        plt.ylim((ymin,ymax))
+        plt.xlim((min(xvals),max(xvals)))
+        plt.plot(xvals, dataset, label=''+labels[i], c=get_matplotlib_color(i)) 
     plt.grid()
     plt.legend(loc='best')
     plt.show()
