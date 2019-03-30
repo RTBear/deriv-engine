@@ -79,7 +79,7 @@ def graph_riemann_approx_err(approxs, xmin=-10, xmax=10, n=10, name='Graph of f(
     plt.legend(loc='best')
     plt.show()
 
-def graphFromTable(xvals, data, labels, name=''):
+def graphFromTable(xvals, data, labels, name='', xlabel='x', ylabel='y'):
     '''
     xvals: iterable where each entry is an x coordinate
     data: iterable of iterable(s). Each inner iterable is a set of y coordinates for the corisponding x coords in xvals
@@ -91,8 +91,8 @@ def graphFromTable(xvals, data, labels, name=''):
     for i,dataset in enumerate(data):
         fig1 = plt.figure(1)
         fig1.suptitle(name)
-        plt.xlabel('x')
-        plt.ylabel('y')
+        plt.xlabel(xlabel)
+        plt.ylabel(ylabel)
         ymin = min(ymin, min(dataset))
         ymax = max(ymax, max(dataset))
         plt.ylim((ymin,ymax))

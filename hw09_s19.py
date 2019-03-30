@@ -53,7 +53,7 @@ def plot_bee_traffic(csv_fp):
     down = [fd[i][1] for i in fd]
     lateral = [fd[i][2] for i in fd]
     data = [up,down,lateral]
-    graph.graphFromTable(xvals,data,labels,name='Bee traffic for '+csv_fp)
+    graph.graphFromTable(xvals,data,labels,name='Bee traffic for '+csv_fp, xlabel='t (seconds)', ylabel='moving bees')
 
 def sr_approx(f, a, b, n):#alias for simpson_approx
     return simpson_approx(f, a, b, n)
@@ -105,42 +105,246 @@ def bee_traffic_stats(fd):
     return(sr_approx(up_bte, 5, 28, 23),sr_approx(down_bte, 5, 28, 23),sr_approx(lat_bte, 5, 28, 23))
 
 def find_smallest_up_down_gap_file(csv_dir):
-    ## your code here
-    pass
+    '''
+    gap is measured as abs(upward_est - downward_est)
+    return: 5-tuple as follows:
+    0 - path to csv with smallest gap
+    1 - upward est
+    2 - downward est
+    3 - lateral est
+    4 - gap
+    '''
+    smallest_gap = None
+    smallest_gap_fp = None
+    smallest_gap_up_est = None
+    smallest_gap_down_est = None
+    smallest_gap_lat_est = None
+    fnames = generate_file_names('.csv',csv_dir)
+    for fp in fnames:
+        fd = read_csv_file(fp)
+        up_est,down_est,lat_est = bee_traffic_stats(fd)
+        gap = abs(up_est - down_est)
+        if smallest_gap == None:
+            smallest_gap = gap
+            smallest_gap_fp = fp
 
-def find_largest_up_down_gap_file(csv_dir):
-    ## your code here
-    pass
+            smallest_gap_up_est = up_est
+            smallest_gap_down_est = down_est
+            smallest_gap_lat_est = lat_est
+        elif gap < smallest_gap:
+            smallest_gap = gap
+            smallest_gap_fp = fp
+
+            smallest_gap_up_est = up_est
+            smallest_gap_down_est = down_est
+            smallest_gap_lat_est = lat_est
+    return (smallest_gap_fp, smallest_gap_up_est, smallest_gap_down_est, smallest_gap_lat_est, smallest_gap)
+    
+
+def find_largest_up_down_gap_file(csv_dir):#my dev csv_dir is './bee_traffic_estimates'
+    '''
+    gap is measured as abs(upward_est - downward_est)
+    return: 5-tuple as follows:
+    0 - path to csv with largest gap
+    1 - upward est
+    2 - downward est
+    3 - lateral est
+    4 - gap
+    '''
+    largest_gap = None
+    largest_gap_fp = None
+    largest_gap_up_est = None
+    largest_gap_down_est = None
+    largest_gap_lat_est = None
+    fnames = generate_file_names('.csv',csv_dir)
+    for fp in fnames:
+        fd = read_csv_file(fp)
+        up_est,down_est,lat_est = bee_traffic_stats(fd)
+        gap = abs(up_est - down_est)
+        if largest_gap == None:
+            largest_gap = gap
+            largest_gap_fp = fp
+
+            largest_gap_up_est = up_est
+            largest_gap_down_est = down_est
+            largest_gap_lat_est = lat_est
+        elif gap > largest_gap:
+            largest_gap = gap
+            largest_gap_fp = fp
+
+            largest_gap_up_est = up_est
+            largest_gap_down_est = down_est
+            largest_gap_lat_est = lat_est
+    return (largest_gap_fp, largest_gap_up_est, largest_gap_down_est, largest_gap_lat_est, largest_gap)
 
 ############################
 
 def find_max_up_file(csv_dir):
-    ## your code here
-    pass
+    '''
+    return: 4-tuple as follows:
+    0 - path to csv with max up
+    1 - upward est
+    2 - downward est
+    3 - lateral est
+    '''
+    max_up = None
+    max_up_fp = None
+    max_up_up_est = None
+    max_up_down_est = None
+    max_up_lat_est = None
+    fnames = generate_file_names('.csv',csv_dir)
+    for fp in fnames:
+        fd = read_csv_file(fp)
+        up_est,down_est,lat_est = bee_traffic_stats(fd)
+        if max_up == None:
+            max_up = up_est
+            max_up_fp = fp
+
+            max_up_up_est = up_est
+            max_up_down_est = down_est
+            max_up_lat_est = lat_est
+        elif up_est > max_up:
+            max_up = up_est
+            max_up_fp = fp
+
+            max_up_up_est = up_est
+            max_up_down_est = down_est
+            max_up_lat_est = lat_est
+    return (max_up_fp, max_up_up_est, max_up_down_est, max_up_lat_est)
 
 def find_min_up_file(csv_dir):
-    ## your code here
-    pass
+    min_up = None
+    min_up_fp = None
+    min_up_up_est = None
+    min_up_down_est = None
+    min_up_lat_est = None
+    fnames = generate_file_names('.csv',csv_dir)
+    for fp in fnames:
+        fd = read_csv_file(fp)
+        up_est,down_est,lat_est = bee_traffic_stats(fd)
+        if min_up == None:
+            min_up = up_est
+            min_up_fp = fp
+
+            min_up_up_est = up_est
+            min_up_down_est = down_est
+            min_up_lat_est = lat_est
+        elif up_est < min_up:
+            min_up = up_est
+            min_up_fp = fp
+
+            min_up_up_est = up_est
+            min_up_down_est = down_est
+            min_up_lat_est = lat_est
+    return (min_up_fp, min_up_up_est, min_up_down_est, min_up_lat_est)
 
 ###########################
 
 def find_max_down_file(csv_dir):
-    ## your code here
-    pass
+    max_down = None
+    max_down_fp = None
+    max_down_up_est = None
+    max_down_down_est = None
+    max_down_lat_est = None
+    fnames = generate_file_names('.csv',csv_dir)
+    for fp in fnames:
+        fd = read_csv_file(fp)
+        up_est,down_est,lat_est = bee_traffic_stats(fd)
+        if max_down == None:
+            max_down = down_est
+            max_down_fp = fp
+
+            max_down_up_est = up_est
+            max_down_down_est = down_est
+            max_down_lat_est = lat_est
+        elif down_est > max_down:
+            max_down = down_est
+            max_down_fp = fp
+
+            max_down_up_est = up_est
+            max_down_down_est = down_est
+            max_down_lat_est = lat_est
+    return (max_down_fp, max_down_up_est, max_down_down_est, max_down_lat_est)
 
 def find_min_down_file(csv_dir):
-    ## your code here
-    pass
+    min_down = None
+    min_down_fp = None
+    min_down_up_est = None
+    min_down_down_est = None
+    min_down_lat_est = None
+    fnames = generate_file_names('.csv',csv_dir)
+    for fp in fnames:
+        fd = read_csv_file(fp)
+        up_est,down_est,lat_est = bee_traffic_stats(fd)
+        if min_down == None:
+            min_down = down_est
+            min_down_fp = fp
+
+            min_down_up_est = up_est
+            min_down_down_est = down_est
+            min_down_lat_est = lat_est
+        elif down_est < min_down:
+            min_down = down_est
+            min_down_fp = fp
+
+            min_down_up_est = up_est
+            min_down_down_est = down_est
+            min_down_lat_est = lat_est
+    return (min_down_fp, min_down_up_est, min_down_down_est, min_down_lat_est)
 
 ############################
 
 def find_max_lat_file(csv_dir):
-    ## your code here
-    pass
+    max_lat = None
+    max_lat_fp = None
+    max_lat_up_est = None
+    max_lat_down_est = None
+    max_lat_lat_est = None
+    fnames = generate_file_names('.csv',csv_dir)
+    for fp in fnames:
+        fd = read_csv_file(fp)
+        up_est,down_est,lat_est = bee_traffic_stats(fd)
+        if max_lat == None:
+            max_lat = lat_est
+            max_lat_fp = fp
+
+            max_lat_up_est = up_est
+            max_lat_down_est = down_est
+            max_lat_lat_est = lat_est
+        elif lat_est > max_lat:
+            max_lat = lat_est
+            max_lat_fp = fp
+
+            max_lat_up_est = up_est
+            max_lat_down_est = down_est
+            max_lat_lat_est = lat_est
+    return (max_lat_fp, max_lat_up_est, max_lat_down_est, max_lat_lat_est)
 
 def find_min_lat_file(csv_dir):
-    ## your code here
-    pass
+    min_lat = None
+    min_lat_fp = None
+    min_lat_up_est = None
+    min_lat_down_est = None
+    min_lat_lat_est = None
+    fnames = generate_file_names('.csv',csv_dir)
+    for fp in fnames:
+        fd = read_csv_file(fp)
+        up_est,down_est,lat_est = bee_traffic_stats(fd)
+        if min_lat == None:
+            min_lat = lat_est
+            min_lat_fp = fp
+
+            min_lat_up_est = up_est
+            min_lat_down_est = down_est
+            min_lat_lat_est = lat_est
+        elif lat_est < min_lat:
+            min_lat = lat_est
+            min_lat_fp = fp
+
+            min_lat_up_est = up_est
+            min_lat_down_est = down_est
+            min_lat_lat_est = lat_est
+    return (min_lat_fp, min_lat_up_est, min_lat_down_est, min_lat_lat_est)
 
 
 def testFunc(csv_fp):
@@ -154,6 +358,7 @@ def testFunc(csv_fp):
 
 if __name__ == '__main__':
     csv_fp = './bee_traffic_estimates/192_168_4_5-2018-07-01_08-00-10.csv'
+    csv_dir = './bee_traffic_estimates'
     # plot_bee_traffic(csv_fp)
     test = sr_approx(lambda x: x**2, 0, 2, 10)
     print(test)
@@ -181,3 +386,41 @@ if __name__ == '__main__':
 
     fd = read_csv_file('./bee_traffic_estimates/192_168_4_5-2018-07-01_18-00-10.csv')
     print(bee_traffic_stats(fd))
+    print('-------------')
+
+    find_smallest_up_down_gap_file('./bee_traffic_estimates')
+    print('-------------')
+
+    fp, u, d, l, gap = find_smallest_up_down_gap_file('./bee_traffic_estimates')
+    print(fp, u, d, l, gap)
+    plot_bee_traffic(fp)
+    print('-------------')
+
+    fp, u, d, l, gap = find_largest_up_down_gap_file('./bee_traffic_estimates')
+    print(fp, u, d, l, gap)
+    plot_bee_traffic(fp)
+    print('-------------')
+
+    fp, u, d, l = find_max_up_file(csv_dir)
+    print(fp, u, d, l)
+    plot_bee_traffic(fp)
+
+    fp, u, d, l = find_min_up_file(csv_dir)
+    print(fp, u, d, l)
+    plot_bee_traffic(fp)
+
+    fp, u, d, l = find_max_down_file(csv_dir)
+    print(fp, u, d, l)
+    plot_bee_traffic(fp)
+
+    fp, u, d, l = find_min_down_file(csv_dir)
+    print(fp, u, d, l)
+    plot_bee_traffic(fp)
+
+    fp, u, d, l = find_max_lat_file(csv_dir)
+    print(fp, u, d, l)
+    plot_bee_traffic(fp)
+
+    fp, u, d, l = find_min_lat_file(csv_dir)
+    print(fp, u, d, l)
+    plot_bee_traffic(fp)
