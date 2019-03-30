@@ -23,8 +23,9 @@ from infl import find_infl_pnts
 from hw03 import maximize_revenue,dydt_given_x_dxdt
 from hw05 import expected_rev_dir,c14_carbon_dating,demand_elasticity,find_growth_model,is_demand_elastic,radioactive_decay,solve_pdeq,solve_pdeq_with_init_cond
 from antideriv import antideriv
-from riemann import *
+from riemann import riemann_approx, riemann_approx_with_gt, plot_riemann_error
 from graphdrv import graph_drv
+from graph import graph_funcs
 
 class Assign01UnitTests(unittest.TestCase):
 
@@ -1929,6 +1930,26 @@ class Assign01UnitTests(unittest.TestCase):
                                 pp=0)
         assert abs(approx.get_val() - 0.386296444432) <= err
         print('Assign 08: Problem 01: Unit Test 04: pass')
+
+    def test_assign_08_prob_01_ut_04_1(self):
+        print('\n***** Assign 08: Problem 01: Unit Test 04.1 *****')
+        fex1 = prod(mult1=make_const(2),
+                    mult2=make_pwr('x', 2.0))
+        fex2 = plus(elt1=fex1, elt2=make_const(2.0))
+        funcs = [fex2,deriv(fex2)]
+        # graph_drv(fex2, [-10, 10], [-50.0, 50.0])
+        # graph_funcs(funcs, [-10, 10], [-50.0, 50.0])
+        print('Assign 08: Problem 01: Unit Test 04.1: pass')
+
+    def test_assign_08_prob_01_ut_04_2(self):
+        print('\n***** Assign 08: Problem 01: Unit Test 04.2 *****')
+        fex = make_prod(make_const(3.0), make_pwr('x', 2.0))
+        fex = make_plus(fex, make_e_expr(make_pwr('x', 1.0)))
+        # plot_riemann_error(fex, make_const(-1.0),
+        # make_const(1.0),
+        # make_const(4.35),
+        # make_const(100))
+        print('Assign 08: Problem 01: Unit Test 04.2: pass')
 
     def runTest(self):
         pass

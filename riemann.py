@@ -14,6 +14,7 @@ from antideriv import antiderivdef
 from tof import tof
 import matplotlib.pyplot as plt
 from maker import make_const
+from graph import *
 
 def riemann_approx(fexpr, a, b, n, pp=0):
   '''
@@ -79,7 +80,12 @@ def plot_riemann_error(fexpr, a, b, gt, n):
   assert isinstance(b, const)
   assert isinstance(gt, const)
   assert isinstance(n, const)
-  # your code here
+
+  left = riemann_approx_with_gt(fexpr, a, b, gt, n, pp=-1)
+  middle = riemann_approx_with_gt(fexpr, a, b, gt, n, pp=0)
+  right = riemann_approx_with_gt(fexpr, a, b, gt, n, pp=1)
+
+  graph_riemann_approx_err(approxs=(right,left,middle),xmin=a.get_val(),xmax=b.get_val(),n=n.get_val(),name='Riemann Approximation Error')
 
 
 
