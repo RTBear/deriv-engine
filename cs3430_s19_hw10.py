@@ -34,12 +34,39 @@ def gd_detect_edges(rgb_img, magn_thresh=20):
         for j in range(1, height - 1):
             is_edge_pixel = False
             #figure out if is edge pixel by computing gradient for kernel
+            #dy = I(c,r-1) - I(c,r+1)
+            #dx = I(c+1,r) - I(c-1,r)
+            #||G|| = sqrt(dy^2 + dx^2) is gradient's magnitude at I(c,r)
+            #theta = arctan(dy/dx) is the gradients orientation
 
-            if is_edge_pixel or i > 10 and i < 20:
+            #up
+            px_up = rgb_img.getpixel((i,j-1))
+            gs_px_up = luminosity(px_up)
+
+            #right
+            px_right = rgb_img.getpixel((i+1,j))
+            gs_px_right = luminosity(px_right)
+
+            #down
+            px_down = rgb_img.getpixel((i,j+1))
+            gs_px_down = luminosity(px_down)
+
+            #left
+            px_left = rgb_img.getpixel((i-1,j))
+            gs_px_left = luminosity(px_left)
+
+            #compute gradient
+            dy = gs_px_up - gs_px_down
+            dx = gs_px_right - gs_px_left
+            gradient = math.sqrt(dy ** 2 + dx ** 2)
+
+            if gradient >= magn_thresh:
+                is_edge_pixel = True
+
+            if is_edge_pixel:
                 edge_img_px[i, j] = (255)
             else:
                 edge_img_px[i, j] = (0)
-    print(edge_img_px)
     return edge_img
 
 
