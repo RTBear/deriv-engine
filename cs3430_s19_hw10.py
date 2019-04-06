@@ -39,7 +39,7 @@ def gd_detect_edges(rgb_img, magn_thresh=20):
             #||G|| = sqrt(dy^2 + dx^2) is gradient's magnitude at I(c,r)
             #theta = arctan(dy/dx) is the gradients orientation
 
-            #up
+            #up get up pixel and compute luminosity
             px_up = rgb_img.getpixel((i,j-1))
             gs_px_up = luminosity(px_up)
 
@@ -74,8 +74,25 @@ def gd_detect_edges(rgb_img, magn_thresh=20):
 
 def cosine_sim(img1, img2):
     assert img1.size == img2.size
-    ## your code here
-    pass
+
+    numerator = 0
+    denom_left = 0
+    denom_right = 0
+    for i in range(img1.size[0]):
+        for j in range(img1.size[1]):
+            numerator += img1.getpixel((i,j)) * img2.getpixel((i,j))
+            denom_left += img1.getpixel((i,j)) ** 2
+            denom_right += img2.getpixel((i,j)) ** 2
+
+    # for i in range(img1.size[0]):
+        # for j in range(img1.size[1]):
+
+    s_denom_left = math.sqrt(denom_left)
+    s_denom_right = math.sqrt(denom_right)
+
+    c_sim = numerator / (s_denom_left * s_denom_right)
+
+    return c_sim
 
 '''
 >>> test_cosine_sim('img/2b_nb_09_ed.png', 'img/2b_nb_09_ed.png')
@@ -102,8 +119,15 @@ def test_cosine_sim(img_fp1, img_fp2):
 
 def euclid_sim(img1, img2):
     assert img1.size == img2.size
-    ## your code here
-    pass
+
+    s = 0
+    for i in range(img1.size[0]):
+        for j in range(img1.size[1]):
+            s += (img1.getpixel((i,j)) - img2.getpixel((i,j))) ** 2
+
+    e_sum = math.sqrt(s)
+
+    return e_sum
 
 '''
 >>> test_euclid_sim('img/2b_nb_10_ed.png', 'img/2b_nb_10_ed.png')
@@ -127,8 +151,13 @@ def test_euclid_sim(img_fp1, img_fp2):
 
 def jaccard_sim(img1, img2):
     assert img1.size == img2.size
-    ## your code here
-    pass
+
+    s1 = set(np.array(img1).flatten().tolist())
+    s2 = set(np.array(img2).flatten().tolist())
+
+    j_sim = float(len(set.intersection(s1,s2))) / len(set.union(s1,s2))
+
+    return j_sim
 
 '''
 >>> test_jaccard_sim('img/2b_nb_10_ed.png', 'img/2b_nb_10_ed.png')
@@ -174,12 +203,24 @@ def test_02():
     del img2
     
 if __name__ == '__main__':
-    img = Image.open('img/1b_bee_01.png')
-    print(img.getpixel((15,10)))
-    print(img.size)
-    px = img.load()
-    print(px[15,10])
+    # img = Image.open('img/output11885.jpg')
+    # print(img.getpixel((15,10)))
+    # print(img.size)
+    # px = img.load()
+    # print(px[15,10])
 
-    edge_img = gd_detect_edges(img)
-    edge_img.show()
+    # edge_img = gd_detect_edges(img)
+    # edge_img.show()
 
+    test_cosine_sim('img/1b_bee_01_ed.png', 'img/1b_bee_01_ed.png')
+    # test_cosine_sim('img/output11884_ed.jpg', 'img/output11885_ed.jpg')
+    test_cosine_sim('img/2b_nb_09_ed.png', 'img/2b_nb_10_ed.png')
+    print('-----------')
+
+    test_euclid_sim('img/1b_bee_01_ed.png', 'img/1b_bee_01_ed.png')
+    test_euclid_sim('img/2b_nb_09_ed.png', 'img/2b_nb_10_ed.png')
+    print('-----------')
+
+    test_jaccard_sim('img/2b_nb_10_ed.png', 'img/2b_nb_10_ed.png')
+    test_jaccard_sim('img/2b_nb_09_ed.png', 'img/2b_nb_10_ed.png')
+    test_jaccard_sim('img/output11885_ed.jpg', 'img/output11884_ed.jpg')
