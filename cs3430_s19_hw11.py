@@ -270,8 +270,8 @@ def ht_test_12(img_fp, magn_thresh=20, spl=20):
     del edimg
     
 if __name__ == '__main__':
-    for i in range(10):
-        s = 'nra_ut_0' + str(i)
+    for i in range(11):
+        s = 'nra_ut_' + "%02d" % i #nra_ut_ + number of unit test formatted to be 2 places with leading 0s
         print(s)
         globals()[s]()
 
