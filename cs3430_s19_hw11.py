@@ -22,6 +22,7 @@ from maker import make_pwr_expr, make_e_expr
 from plus import plus
 from prod import prod
 from deriv import deriv
+from cs3430_s19_hw10 import gd_detect_edges
 '''
 '''
 
@@ -138,8 +139,62 @@ def nra_ut_10():
 # =================== Problem 2 (4 points) ===================
 
 def ht_detect_lines(img_fp, magn_thresh=20, spl=20):
-    ## your code here
-    pass
+    img = Image.open(img_fp)
+    edimg = gd_detect_edges(img, magn_thresh=magn_thresh)
+
+    width, height = img.size
+
+    max_theta = 180 + 1 #bc lines will go all the way through origin, making all possible lines
+    max_rho = int(math.sqrt(width ** 2 + height ** 2)) #this is length of image from one corner to another
+    ht = np.zeros((max_theta,max_rho))
+
+    cv_img = cv2.imread(img_fp)
+
+
+    #compute ht vals
+    for x in range(width):
+        for y in range(height):
+            #for each point in image with sufficiently large gradient
+            if edimg.getpixel((x,y)) == 255:
+                for th in range(max_theta): # +1 because range needs to be inclusive
+                    rho = int(x*math.cos(th) + y*math.sin(th))
+                    ht[th][rho] += 1
+
+    #ht point to euclid point: 
+    # x = rho * cos(theta)
+    # y = rho * sin(theta)
+    for th in range(max_theta):
+        for rho in range(max_rho):
+            if ht[th][rho] >= spl:
+                x = rho * math.cos(th)
+                y = rho * math.sin(th)
+                slope = -1 / math.tan(th)
+
+                begin_x = 0
+                begin_y = int(slope*begin_x - slope*x + y)
+
+                end_x = width
+                end_y = int(slope*end_x - slope*x + y)
+
+                cv2.line(cv_img, (begin_x,begin_y), (end_x,end_y), (255,0,0), 1)
+                print('th',th)
+                print((begin_x,begin_y), (end_x,end_y))
+
+
+
+
+
+    print(ht)
+
+    cv2.imshow('lines', cv_img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+    edimg.show()
+
+
+    return img, cv_img, edimg, ht
+
 
 ################ Unit Tests for Problem 2 ####################
 ##        
@@ -270,8 +325,9 @@ def ht_test_12(img_fp, magn_thresh=20, spl=20):
     del edimg
     
 if __name__ == '__main__':
-    for i in range(11):
-        s = 'nra_ut_' + "%02d" % i #nra_ut_ + number of unit test formatted to be 2 places with leading 0s
-        print(s)
-        globals()[s]()
+    # for i in range(11):
+    #     s = 'nra_ut_' + "%02d" % i #nra_ut_ + number of unit test formatted to be 2 places with leading 0s
+    #     print(s)
+    #     globals()[s]()
 
+    ht_test_01('img/EdgeImage_01.jpg', magn_thresh=35, spl=110)
