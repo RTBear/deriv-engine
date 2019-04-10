@@ -156,8 +156,8 @@ def ht_detect_lines(img_fp, magn_thresh=20, spl=20):
         for y in range(height):
             #for each point in image with sufficiently large gradient
             if edimg.getpixel((x,y)) == 255:
-                for th in range(max_theta): # +1 because range needs to be inclusive
-                    rho = int(x*math.cos(th) + y*math.sin(th))
+                for th in range(max_theta): 
+                    rho = int(round(x*math.cos(th) + y*math.sin(th)))
                     ht[th][rho] += 1
 
     #ht point to euclid point: 
@@ -168,29 +168,43 @@ def ht_detect_lines(img_fp, magn_thresh=20, spl=20):
             if ht[th][rho] >= spl:
                 x = rho * math.cos(th)
                 y = rho * math.sin(th)
-                slope = -1 / math.tan(th)
+                if math.tan(th) == 0:
+                    slope = -99999
+                else:
+                    slope = -1 / math.tan(th)
 
-                begin_x = 0
-                begin_y = int(slope*begin_x - slope*x + y)
+                if abs(slope) > 99:#basically vertical
+                    begin_x = int(x)
+                    begin_y = 0
 
-                end_x = width
-                end_y = int(slope*end_x - slope*x + y)
+                    end_x = int(x)
+                    end_y = height
+                    # print('----------------',x)
 
-                cv2.line(cv_img, (begin_x,begin_y), (end_x,end_y), (255,0,0), 1)
-                print('th',th)
-                print((begin_x,begin_y), (end_x,end_y))
+                else:
+                    begin_x = 0
+                    begin_y = int(slope*begin_x - slope*x + y)
+
+                    end_x = width
+                    end_y = int(slope*end_x - slope*x + y)
+
+                cv2.line(cv_img, (begin_x,begin_y), (end_x,end_y), (255,0,0), 2)
+                # print('th',th)
+                # print('m',slope)
+                # print((begin_x,begin_y), (end_x,end_y))
+
+    # cv2.line(cv_img, (207,0), (207,height), (0,255,0), 2)
 
 
 
 
+    # print(ht)
 
-    print(ht)
+    # cv2.imshow('lines', cv_img)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
-    cv2.imshow('lines', cv_img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
-    edimg.show()
+    # edimg.show()
 
 
     return img, cv_img, edimg, ht
@@ -206,8 +220,8 @@ def ht_detect_lines(img_fp, magn_thresh=20, spl=20):
         
 def ht_test_01(img_fp, magn_thresh=20, spl=20):
     img, lnimg, edimg, ht = ht_detect_lines(img_fp,
-                                            magn_thresh=magn_thresh,
-                                            spl=spl)
+                                            magn_thresh=35,
+                                            spl=110)
     cv2.imwrite('im01_ln.png', lnimg)
     edimg.save('im01_ed.png')
     del img
@@ -216,18 +230,18 @@ def ht_test_01(img_fp, magn_thresh=20, spl=20):
 
 def ht_test_02(img_fp, magn_thresh=20, spl=20):
     img, lnimg, edimg, ht = ht_detect_lines(img_fp,
-                                            magn_thresh=magn_thresh,
-                                            spl=spl)
+                                            magn_thresh=35,
+                                            spl=110)
     cv2.imwrite('im02_ln.png', lnimg)
     edimg.save('im02_ed.png')
     del img
     del lnimg
     del edimg
 
-def ht_test_02(img_fp, magn_thresh=20, spl=20):
+def ht_test_03(img_fp, magn_thresh=20, spl=20):
     img, lnimg, edimg, ht = ht_detect_lines(img_fp,
-                                            magn_thresh=magn_thresh,
-                                            spl=spl)
+                                            magn_thresh=35,
+                                            spl=70)
     cv2.imwrite('im03_ln.png', lnimg)
     edimg.save('im03_ed.png')
     del img
@@ -236,8 +250,8 @@ def ht_test_02(img_fp, magn_thresh=20, spl=20):
 
 def ht_test_04(img_fp, magn_thresh=20, spl=20):
     img, lnimg, edimg, ht = ht_detect_lines(img_fp,
-                                            magn_thresh=magn_thresh,
-                                            spl=spl)
+                                            magn_thresh=35,
+                                            spl=200)
     cv2.imwrite('im04_ln.png', lnimg)
     edimg.save('im04_ed.png')
     del img
@@ -246,8 +260,8 @@ def ht_test_04(img_fp, magn_thresh=20, spl=20):
 
 def ht_test_05(img_fp, magn_thresh=20, spl=20):
     img, lnimg, edimg, ht = ht_detect_lines(img_fp,
-                                            magn_thresh=magn_thresh,
-                                            spl=spl)
+                                            magn_thresh=35,
+                                            spl=100)
     cv2.imwrite('im05_ln.png', lnimg)
     edimg.save('im05_ed.png')
     del img
@@ -256,8 +270,8 @@ def ht_test_05(img_fp, magn_thresh=20, spl=20):
 
 def ht_test_06(img_fp, magn_thresh=20, spl=20):
     img, lnimg, edimg, ht = ht_detect_lines(img_fp,
-                                            magn_thresh=magn_thresh,
-                                            spl=spl)
+                                            magn_thresh=35,
+                                            spl=100)
     cv2.imwrite('im06_ln.png', lnimg)
     edimg.save('im06_ed.png')
     del img
@@ -266,8 +280,8 @@ def ht_test_06(img_fp, magn_thresh=20, spl=20):
 
 def ht_test_07(img_fp, magn_thresh=20, spl=20):
     img, lnimg, edimg, ht = ht_detect_lines(img_fp,
-                                            magn_thresh=magn_thresh,
-                                            spl=spl)
+                                            magn_thresh=15,
+                                            spl=125)
     cv2.imwrite('im07_ln.png', lnimg)
     edimg.save('im07_ed.png')
     del img
@@ -276,8 +290,8 @@ def ht_test_07(img_fp, magn_thresh=20, spl=20):
 
 def ht_test_08(img_fp, magn_thresh=20, spl=20):
     img, lnimg, edimg, ht = ht_detect_lines(img_fp,
-                                            magn_thresh=magn_thresh,
-                                            spl=spl)
+                                            magn_thresh=20,
+                                            spl=450)
     cv2.imwrite('im08_ln.png', lnimg)
     edimg.save('im08_ed.png')
     del img
@@ -286,8 +300,8 @@ def ht_test_08(img_fp, magn_thresh=20, spl=20):
 
 def ht_test_09(img_fp, magn_thresh=20, spl=20):
     img, lnimg, edimg, ht = ht_detect_lines(img_fp,
-                                            magn_thresh=magn_thresh,
-                                            spl=spl)
+                                            magn_thresh=30,
+                                            spl=310)
     cv2.imwrite('im09_ln.png', lnimg)
     edimg.save('im09_ed.png')
     del img
@@ -296,8 +310,8 @@ def ht_test_09(img_fp, magn_thresh=20, spl=20):
 
 def ht_test_10(img_fp, magn_thresh=20, spl=20):
     img, lnimg, edimg, ht = ht_detect_lines(img_fp,
-                                            magn_thresh=magn_thresh,
-                                            spl=spl)
+                                            magn_thresh=10,
+                                            spl=250)
     cv2.imwrite('im10_ln.png', lnimg)
     edimg.save('im10_ed.png')
     del img
@@ -306,8 +320,8 @@ def ht_test_10(img_fp, magn_thresh=20, spl=20):
 
 def ht_test_11(img_fp, magn_thresh=20, spl=20):
     img, lnimg, edimg, ht = ht_detect_lines(img_fp,
-                                            magn_thresh=magn_thresh,
-                                            spl=spl)
+                                            magn_thresh=15,
+                                            spl=190)
     cv2.imwrite('im11_ln.png', lnimg)
     edimg.save('im11_ed.png')
     del img
@@ -316,8 +330,8 @@ def ht_test_11(img_fp, magn_thresh=20, spl=20):
 
 def ht_test_12(img_fp, magn_thresh=20, spl=20):
     img, lnimg, edimg, ht = ht_detect_lines(img_fp,
-                                            magn_thresh=magn_thresh,
-                                            spl=spl)
+                                            magn_thresh=5,
+                                            spl=200)
     cv2.imwrite('im12_ln.png', lnimg)
     edimg.save('im12_ed.png')
     del img
@@ -330,4 +344,30 @@ if __name__ == '__main__':
     #     print(s)
     #     globals()[s]()
 
-    ht_test_01('img/EdgeImage_01.jpg', magn_thresh=35, spl=110)
+    # ht_test_01('img/EdgeImage_01.jpg', magn_thresh=35, spl=110)
+    # ht_test_02('img/EdgeImage_02.jpg', magn_thresh=35, spl=110)
+    # ht_test_03('img/EdgeImage_03.jpg', magn_thresh=35, spl=70)
+    # ht_test_04('img/envelope.jpeg', magn_thresh=35, spl=200)
+    # ht_test_05('img/horline.png', magn_thresh=35, spl=100)
+    # ht_test_06('img/verline.png', magn_thresh=35, spl=100)
+    # ht_test_07('img/cross.png', magn_thresh=15, spl=125)
+
+    # ht_test_08('img/tiles.jpeg', magn_thresh=20, spl=450)
+    # ht_test_09('img/kitchen.jpeg', magn_thresh=15, spl=400)
+
+    # ht_test_10('img/road01.png', magn_thresh=10, spl=250)
+    # ht_test_11('img/road02.png', magn_thresh=15, spl=190)
+    # ht_test_12('img/road03.png', magn_thresh=5, spl=200)
+
+    ht_test_01('img/EdgeImage_01.jpg')
+    ht_test_02('img/EdgeImage_02.jpg')
+    ht_test_03('img/EdgeImage_03.jpg')
+    ht_test_04('img/envelope.jpeg')
+    ht_test_05('img/horline.png')
+    ht_test_06('img/verline.png')
+    ht_test_07('img/cross.png')
+    ht_test_08('img/tiles.jpeg')
+    ht_test_09('img/kitchen.jpeg')
+    ht_test_10('img/road01.png')
+    ht_test_11('img/road02.png')
+    ht_test_12('img/road03.png')
