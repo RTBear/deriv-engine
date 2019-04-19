@@ -19,7 +19,11 @@ from quot import quot
 from point2d import point2d
 from ln import ln
 from absv import absv
+from line_eq import line_eq
 import math
+
+def make_line_eq(lhs, rhs):
+    return line_eq(lhs=lhs, rhs=rhs)
 
 def make_var(var_name):
     return var(name=var_name)
