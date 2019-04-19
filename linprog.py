@@ -367,12 +367,36 @@ def test_09():
     print(line_intersection(ln1, ln2))
 
 def maximize_obj_fun(f, corner_points):
-    ## your code here
-    pass
+    mx = -9999999
+    mx_pt = None
+    for pt in corner_points:
+        x = pt.get_x().get_val()
+        y = pt.get_y().get_val()
+        
+        val = f(x,y)
+
+        if val > mx:
+            mx = val
+            mx_pt = (x,y)
+    assert not mx_pt == None
+
+    return (mx, mx_pt)
 
 def minimize_obj_fun(f, corner_points):
-    ## your code here
-    pass
+    mn = 9999999
+    mn_pt = None
+    for pt in corner_points:
+        x = pt.get_x().get_val()
+        y = pt.get_y().get_val()
+        
+        val = f(x,y)
+
+        if val < mn:
+            mn = val
+            mn_pt = (x,y)
+    assert not mn_pt == None
+
+    return (mn, mn_pt)
 
 def test_10():
     f1 = lambda x, y: 2*x + y
@@ -415,25 +439,108 @@ def test_12():
     print(line_intersection(ln3, ln4))
 
 ## write your answer to problem 1a as x, y, mv
+#ANSWER: 5, 1, 11
 def opt_prob_1a():
-    ## your code here
-    pass
+    f1 = lambda x, y: 2*x + y
+
+
+    #find corner points:
+    ln1 = make_line_eq(make_var('x'), make_const(1.0))
+    ln2 = make_line_eq(make_var('y'), make_const(1.0))
+
+    ln3 = make_line_eq(make_var('x'), make_const(5.0))
+    ln4 = make_line_eq(make_var('y'), make_const(5.0))
+
+    p12 = line_intersection(ln1, ln2)
+    # p13 = line_intersection(ln1, ln3) #parallel lines
+    p14 = line_intersection(ln1, ln4)
+
+    p23 = line_intersection(ln2, ln3)
+    # p24 = line_intersection(ln2, ln4) #parallel lines
+
+    p34 = line_intersection(ln3, ln4)
+
+    possible_cps = [p12,p14,p23,p34]
+
+    corner_points = [pt for pt in possible_cps if pt.get_x().get_val() + pt.get_y().get_val() <= 6] #x+y <= 6
+
+    # for pt in corner_points:
+    #     print(pt.get_x().get_val(), pt.get_y().get_val())
+
+    print '1a: ',maximize_obj_fun(f1, corner_points)
 
 ## write your answer to problem 1b as x, y, mv
+#ANSWER: 2, 2, 3
 def opt_prob_1b():
-    ## your code here
-    pass
+    f1 = lambda x, y: x/2 + y
+
+    #find corner points:
+    ln1 = make_line_eq(make_var('x'), make_const(0.0))
+    ln2 = make_line_eq(make_var('y'), make_const(2.0))
+
+    ln3 = make_line_eq(make_var('x'), make_var('y'))#x=y
+    ln4 = make_line_eq(make_plus(make_var('x'),make_var('y')), make_const(6.0))# x+y=6
+
+
+    p12 = line_intersection(ln1, ln2)
+    p13 = line_intersection(ln1, ln3)
+    p14 = line_intersection(ln1, ln4)
+
+    p23 = line_intersection(ln2, ln3)
+    p24 = line_intersection(ln2, ln4)
+
+    p34 = line_intersection(ln3, ln4)
+
+    possible_cps = [p12,p13,p14,p23,p24,p34]
+
+    # for pt in possible_cps:
+    #     print pt
+
+    corner_points = [pt for pt in possible_cps if pt.get_x().get_val() + pt.get_y().get_val() <= 6] #x+y <= 6
+    corner_points = [pt for pt in corner_points if pt.get_x().get_val() >= pt.get_y().get_val()] #x>=y
+    corner_points = [pt for pt in corner_points if pt.get_x().get_val() >= 0] #x>=0
+    corner_points = [pt for pt in corner_points if pt.get_y().get_val() >= 2] #y>=2
+
+
+    # for pt in corner_points:
+    #     print(pt.get_x().get_val(), pt.get_y().get_val())
+
+    print '1b: ',minimize_obj_fun(f1, corner_points)
 
 ## write your answer to problem 1c as x, y, mv
+#ANSWER: 2.5, 2.5, 2.5
 def opt_prob_1c():
-    ## your code here
-    pass
+    f1 = lambda x, y: 3*x - 2*y
+
+
+    #find corner points:
+    ln1 = make_line_eq(make_plus(make_var('x'),make_var('y')), make_const(0.0))# x+y=0
+    ln2 = make_line_eq(make_var('x'),make_var('y'))# x-y=0 => x=y
+    ln3 = make_line_eq(make_plus(make_prod(make_const(-2.0), make_var('x')),make_prod(make_const(4.0), make_var('y'))), make_const(5.0))# -2x+4y=5
+
+
+    p12 = line_intersection(ln1, ln2)
+    p13 = line_intersection(ln1, ln3)
+
+    p23 = line_intersection(ln2, ln3)
+
+
+    possible_cps = [p12,p13,p23]
+
+    corner_points = [pt for pt in possible_cps if -2*pt.get_x().get_val() + 4*pt.get_y().get_val() <= 5] # -2x+4y<=5
+    corner_points = [pt for pt in corner_points if pt.get_x().get_val() + pt.get_y().get_val() >= 0] #x+y>=0
+    corner_points = [pt for pt in corner_points if pt.get_x().get_val() - pt.get_y().get_val() <= 0] #x-y<=0
+
+    # for pt in corner_points:
+    #     print(pt.get_x().get_val(), pt.get_y().get_val())
+
+    print '1c: ',maximize_obj_fun(f1, corner_points)
     
 
 if __name__ == '__main__':
     #all good tests through test 9
     # print('#################################################################1')                                               
-    # test_01()           
+    test_01()           
     # print('#################################################################2')                                               
     # test_02()
     # print('#################################################################3')                                               
@@ -451,4 +558,6 @@ if __name__ == '__main__':
     # print('#################################################################9')                                               
     # test_09()
 
-    pass
+    opt_prob_1a()
+    opt_prob_1b()
+    opt_prob_1c()
