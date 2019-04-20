@@ -1,4 +1,7 @@
 *.pyc
+*.jpg
+*.JPG
+*.png
 *.pdf
 .*
 *.zip
