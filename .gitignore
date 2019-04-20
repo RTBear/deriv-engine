@@ -1,4 +1,6 @@
 *.pyc
+img/
+images/
 *.jpg
 *.JPG
 *.png
